@@ -1,9 +1,14 @@
 import React from 'react';
+import Header from '../components/Header';
 
 function Profile() {
   const userEmail = localStorage.getItem('user'); // userEmail é uma chave hipótetica, checar como o login será feito
   return (
     <div>
+      <Header title="Profile" />
+      Profile
+    </div>
+
       <div>Profile</div>
       <h2 data-testid="profile-email">{userEmail}</h2>
       <button
@@ -28,7 +33,6 @@ function Profile() {
         Logout
       </button>
     </div>
-
   );
 }
 
