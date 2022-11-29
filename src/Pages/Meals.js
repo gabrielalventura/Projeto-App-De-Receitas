@@ -1,11 +1,14 @@
 import React from 'react';
 import useFetch from '../hooks/useFetch';
+import Header from '../components/Header';
 
 function Meals() {
   const { data: { meals } } = useFetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
   console.log(meals);
   return (
     <div>
+      <Header title="Meals" />
+      Meals
       { meals !== undefined && meals.map((meal, key) => {
         const twelve = 12;
         if (key < twelve) {
