@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import AppContext from './AppContext';
 
 function AppProvider({ children }) {
+  const [isActive, setIsActive] = useState(false);
+  const [user, setUser] = useState({});
+
   const srchToggle = useCallback(() => {
     setIsActive(isActive === false);
   }, [isActive]);
-  
-  const [isActive, setIsActive] = useState(false);
-  const [user, setUser] = useState({});
 
   const values = useMemo(() => ({
     user,
