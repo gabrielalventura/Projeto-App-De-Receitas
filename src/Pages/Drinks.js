@@ -6,7 +6,7 @@ function Drinks() {
   const { data: { drinks } } = useFetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
   return (
     <div>
-      <Header title="Drinks" />
+    <Header title="Drinks" />
         Drinks
       { drinks !== undefined && drinks.map((drink, key) => {
         const twelve = 12;
