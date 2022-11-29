@@ -1,9 +1,14 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import AppContext from './AppContext';
 
 function AppProvider({ children }) {
-  const values = useMemo(() => ({ name: '' }), []);
+  const [user, setUser] = useState({});
+
+  const values = useMemo(() => ({
+    user,
+    setUser,
+  }), [user]);
 
   return (
     <AppContext.Provider value={ values }>
