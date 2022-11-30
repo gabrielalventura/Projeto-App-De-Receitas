@@ -1,6 +1,8 @@
 // import React, { useState, useEffect } from 'react';
+// import clipboardCopy from 'clipboard-copy';
 import React from 'react';
 import Header from '../components/Header';
+import Cards from '../components/Cards';
 
 function FavoriteRecipes() {
   // const [faveRecipes, setFaveRecipes] = useState([]);
@@ -60,64 +62,16 @@ function FavoriteRecipes() {
       </div>
       <br />
       {
-        faveRecipes.map((recipe, index) => {
-          if (recipe.type === 'meal') {
-            return (
-              <div key={ index }>
-                <img
-                  data-testid={ `${index}-horizontal-image` }
-                  src={ recipe.image }
-                  alt={ recipe.name }
-                />
-                <h3 data-testid={ `${index}-horizontal-name` }>{ recipe.name }</h3>
-                <h4 data-testid={ `${index}-horizontal-top-text` }>
-                  {`${recipe.nationality} - ${recipe.category}`}
-                </h4>
-                <button
-                  data-testid={ `${index}-horizontal-share-btn` }
-                  type="button"
-                  // onClick={ handleShare }
-                >
-                  Share
-                </button>
-                <button
-                  data-testid={ `${index}-horizontal-favorite-btn` }
-                  type="button"
-                  // onClick={ handleFavorite }
-                >
-                  Favorite
-                </button>
-              </div>
-            );
-          }
-          return (
-            <div key={ index }>
-              <img
-                data-testid={ `${index}-horizontal-image` }
-                src={ recipe.image }
-                alt={ recipe.name }
-              />
-              <h3 data-testid={ `${index}-horizontal-name` }>{ recipe.name }</h3>
-              <p data-testid={ `${index}-horizontal-top-text` }>
-                { recipe.alcoholicOrNot}
-              </p>
-              <button
-                data-testid={ `${index}-horizontal-share-btn` }
-                type="button"
-                // onClick={ handleShare }
-              >
-                Share
-              </button>
-              <button
-                data-testid={ `${index}-horizontal-favorite-btn` }
-                type="button"
-                // onClick={ handleFavorite }
-              >
-                Favorite
-              </button>
-            </div>
-          );
-        })
+        faveRecipes.map((recipe, index) => (<Cards
+          key={ index }
+          image={ recipe.image } // sucessivamente
+          name={ recipe.name }
+          nationality={ recipe.nationality }
+          category={ recipe.category }
+          type={ recipe.type }
+          alcohool={ recipe.alcoholicOrNot }
+          index={ index }
+        />))
       }
     </div>
   );
