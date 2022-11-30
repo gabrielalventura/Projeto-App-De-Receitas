@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import doneRecipes from '../tests/helpers/mockDoneRecipes';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 function DoneRecipes() {
   // const doneRecipes = localStorage.getItem('doneRecipes');
@@ -85,6 +86,7 @@ function DoneRecipes() {
             ))
           }
         </section>
+        <Footer />
       </div>
     </>
   );
