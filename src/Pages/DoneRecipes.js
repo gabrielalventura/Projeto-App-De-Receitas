@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import doneRecipes from '../helpers/mockDoneRecipes';
+import doneRecipes from '../tests/helpers/mockDoneRecipes';
 import Header from '../components/Header';
 
 function DoneRecipes() {
