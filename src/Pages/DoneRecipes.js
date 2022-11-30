@@ -1,5 +1,7 @@
-import { useState } from 'react';
+
+import React, { useState } from 'react';
 import doneRecipes from './helpers/mockDoneRecipes';
+import Header from '../components/Header';
 
 function DoneRecipes() {
   // const doneRecipes = localStorage.getItem('doneRecipes');
@@ -7,6 +9,7 @@ function DoneRecipes() {
   const [doneRecipesState] = useState(doneRecipes);
 
   return (
+    <Header title="Done Recipes" />
     <div>
       <div>
         <button
