@@ -2,16 +2,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Drinks from './Drinks';
 import Meals from './Meals';
+import Footer from '../components/Footer';
 
 function Recipes({ history }) {
   if (history.location.pathname === '/drinks') {
     return (
-      <Drinks />
+      <div>
+        <Drinks />
+        <Footer />
+      </div>
     );
   }
   if (history.location.pathname === '/meals') {
     return (
-      <Meals />
+      <div>
+        <Meals />
+        <Footer />
+      </div>
     );
   }
 }
