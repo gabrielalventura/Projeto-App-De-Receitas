@@ -1,5 +1,4 @@
 // import React, { useState, useEffect } from 'react';
-// import clipboardCopy from 'clipboard-copy';
 import React from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
@@ -15,7 +14,7 @@ function FavoriteRecipes() {
   // }, [retrieveFaveRecipes]);
 
   const faveRecipes = [{ // usada para testar a renderização dos cards
-    id: 123,
+    id: '52771',
     type: 'meal',
     nationality: 'Italian',
     category: 'Vegetarian',
@@ -65,13 +64,14 @@ function FavoriteRecipes() {
       {
         faveRecipes.map((recipe, index) => (<Cards
           key={ index }
-          image={ recipe.image } // sucessivamente
+          image={ recipe.image }
           name={ recipe.name }
           nationality={ recipe.nationality }
           category={ recipe.category }
           type={ recipe.type }
           alcohol={ recipe.alcoholicOrNot }
           index={ index }
+          id={ recipe.id }
         />))
       }
       <Footer />
