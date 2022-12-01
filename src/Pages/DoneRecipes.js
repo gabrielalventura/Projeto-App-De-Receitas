@@ -17,7 +17,7 @@ function DoneRecipes() {
             name="all"
             type="button"
             data-testid="filter-by-all-btn"
-            onClick={ () => console.log('Clicou') }
+            // onClick={ () => console.log('Clicou') }
           >
             All
           </button>
@@ -25,7 +25,7 @@ function DoneRecipes() {
             name="meals"
             type="button"
             data-testid="filter-by-meal-btn"
-            onClick={ () => console.log('Clicou') }
+            // onClick={ () => console.log('Clicou') }
           >
             Meals
           </button>
@@ -33,7 +33,7 @@ function DoneRecipes() {
             name="drinks"
             type="button"
             data-testid="filter-by-drink-btn"
-            onClick={ () => console.log('Clicou') }
+            // onClick={ () => console.log('Clicou') }
           >
             Drinks
           </button>
