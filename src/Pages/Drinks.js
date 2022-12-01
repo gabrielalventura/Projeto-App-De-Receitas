@@ -35,7 +35,7 @@ function Drinks() {
                 data-testid={ `${strCategory}-category-filter` }
                 onClick={ ({ target }) => {
                   if (target.innerHTML === selectedFilterCategory[0]) {
-                    return setSelectedFilterCategory([])
+                    return setSelectedFilterCategory([]);
                   }
                   setSelectedFilterCategory([target.innerHTML]);
                 } }
