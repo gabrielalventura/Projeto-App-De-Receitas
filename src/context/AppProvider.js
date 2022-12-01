@@ -9,6 +9,7 @@ function AppProvider({ children }) {
   const fetchDrinksCategory = useFetch('https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list');
   const fetchMeals = useFetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
   const fetchFoodsCategorys = useFetch('https://www.themealdb.com/api/json/v1/1/list.php?c=list');
+  const [faveRecipes, setFaveRecipes] = useState([]);
 
   const values = useMemo(() => ({
     user,
@@ -17,7 +18,10 @@ function AppProvider({ children }) {
     fetchDrinksCategory,
     fetchMeals,
     fetchFoodsCategorys,
-  }), [user, fetchDrinks, fetchDrinksCategory, fetchMeals, fetchFoodsCategorys]);
+    faveRecipes,
+    setFaveRecipes,
+  }), [user, fetchDrinks,
+    fetchDrinksCategory, fetchMeals, fetchFoodsCategorys, faveRecipes, setFaveRecipes]);
 
   return (
     <AppContext.Provider value={ values }>

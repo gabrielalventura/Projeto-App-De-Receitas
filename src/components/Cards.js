@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
+import AppContext from '../context/AppContext';
 import '../styles/Cards.css';
-// import { copy } from 'clipboard-copy';
+
 const copy = require('clipboard-copy');
 
 function Cards(props) {
@@ -16,6 +17,7 @@ function Cards(props) {
     id,
   } = props;
 
+  const { faveRecipes, setFaveRecipes } = useContext(AppContext);
   const [wasShared, setWasShared] = useState(false); // usar para construir ternário com msg "Link copied!"
 
   const handleShare = ({ target }) => {
@@ -29,6 +31,12 @@ function Cards(props) {
       copy(`http://localhost:3000/drinks/${recipeID}`);
       setWasShared(true);
     }
+  };
+
+  const handleFavorite = ({ target }) => { // req 54: testar quando tivermos o local storage todo configurado
+    const targetID = target.value;
+    const newArray = faveRecipes.filter((recipe) => recipe.id !== targetID);
+    setFaveRecipes(newArray);
   };
 
   return (
@@ -64,8 +72,9 @@ function Cards(props) {
       <button
         data-testid={ `${index}-horizontal-favorite-btn` }
         type="button"
+        value={ id }
         src="src/images/blackHeartIcon.svg"
-      // onClick={ handleFavorite }
+        onClick={ handleFavorite }
       >
         Unfavorite
       </button>

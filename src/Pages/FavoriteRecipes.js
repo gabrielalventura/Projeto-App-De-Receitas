@@ -5,7 +5,7 @@ import Header from '../components/Header';
 import Cards from '../components/Cards';
 
 function FavoriteRecipes() {
-  // const [faveRecipes, setFaveRecipes] = useState([]);
+  // const { faveRecipes, setFaveRecipes} = useContext(AppProvider)
 
   // const retrieveFaveRecipes = localStorage.getItem('favoriteRecipes');
 
