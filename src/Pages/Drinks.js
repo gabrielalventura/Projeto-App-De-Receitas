@@ -1,14 +1,24 @@
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import AppContext from '../context/AppContext';
 import useFetch from '../hooks/useFetch';
 import Header from '../components/Header';
 
 function Drinks() {
   const {
-    data: { drinks },
-  } = useFetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
-  const {
-    data: { drinks: categorysDrinks },
-  } = useFetch('https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list');
+    fetchDrinksCategory: { data: { drinks: categorysDrinks } },
+    fetchDrinks: { data },
+  } = useContext(AppContext) || [];
+  const [selectedFilterCategory, setSelectedFilterCategory] = useState([]);
+  const [dataDrinks, setDataDrinks] = useState([]);
+  const filteredByCategory = useFetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${selectedFilterCategory[0]}`);
+  useEffect(() => {
+    if (selectedFilterCategory.length > 0) {
+      setDataDrinks(filteredByCategory.data);
+    } else {
+      setDataDrinks(data);
+    }
+  }, [data, selectedFilterCategory, filteredByCategory]);
+
   return (
     <div>
       <Header title="Drinks" />
@@ -23,14 +33,25 @@ function Drinks() {
                 key={ index }
                 type="button"
                 data-testid={ `${strCategory}-category-filter` }
+                onClick={ ({ target }) => {
+                  setSelectedFilterCategory([target.innerHTML]);
+                } }
               >
                 {strCategory}
               </button>
             );
-          } return undefined;
+          }
+          return undefined;
         })}
-      {drinks
-        && drinks.map((drink, key) => {
+      <button
+        type="button"
+        onClick={ () => setSelectedFilterCategory([]) }
+        data-testid="All-category-filter"
+      >
+        All
+      </button>
+      {dataDrinks.drinks
+        && dataDrinks.drinks.map((drink, key) => {
           const twelve = 12;
           if (key < twelve) {
             return (
