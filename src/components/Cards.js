@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import '../styles/Cards.css';
+// import { copy } from 'clipboard-copy';
+const copy = require('clipboard-copy');
 
 function Cards(props) {
   const {
@@ -11,7 +13,23 @@ function Cards(props) {
     type,
     alcohol,
     index,
+    id,
   } = props;
+
+  const [wasShared, setWasShared] = useState(false); // usar para construir ternário com msg "Link copied!"
+
+  const handleShare = ({ target }) => {
+    const recipeID = target.name;
+    const recipeType = target.value;
+
+    if (recipeType === 'meal') {
+      copy(`http://localhost:3000/meals/${recipeID}`);
+      setWasShared(true);
+    } else {
+      copy(`http://localhost:3000/drinks/${recipeID}`);
+      setWasShared(true);
+    }
+  };
 
   return (
     <div>
@@ -36,8 +54,10 @@ function Cards(props) {
       <button
         data-testid={ `${index}-horizontal-share-btn` }
         type="button"
+        name={ id }
+        value={ type }
         src="src/images/shareIcon.svg"
-      // onClick={ handleShare }
+        onClick={ handleShare }
       >
         Share
       </button>
@@ -49,6 +69,10 @@ function Cards(props) {
       >
         Unfavorite
       </button>
+      <br />
+      <div>
+        { wasShared && <p>Link copied!</p>}
+      </div>
     </div>
   );
 }
