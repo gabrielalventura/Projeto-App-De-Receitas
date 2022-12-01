@@ -13,14 +13,12 @@ function Recipes({ history }) {
       </div>
     );
   }
-  if (history.location.pathname === '/meals') {
-    return (
-      <div>
-        <Meals />
-        <Footer />
-      </div>
-    );
-  }
+  return (
+    <div>
+      <Meals />
+      <Footer />
+    </div>
+  );
 }
 
 Recipes.propTypes = ({

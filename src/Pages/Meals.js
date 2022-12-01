@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import AppContext from '../context/AppContext';
 import useFetch from '../hooks/useFetch';
@@ -54,18 +55,22 @@ function Meals() {
         All
       </button>
       {dataFoods.meals
-        && dataFoods.meals.map(({ strMeal, strMealThumb }, key) => {
+        && dataFoods.meals.map(({ strMeal, strMealThumb, idMeal }, key) => {
           const twelve = 12;
           if (key < twelve) {
             return (
-              <div key={ key } data-testid={ `${key}-recipe-card` }>
+              <Link
+                key={ key }
+                data-testid={ `${key}-recipe-card` }
+                to={ `/meals/${idMeal}` }
+              >
                 <p data-testid={ `${key}-card-name` }>{strMeal}</p>
                 <img
                   src={ strMealThumb }
                   data-testid={ `${key}-card-img` }
                   alt={ `receita do prato ${strMeal}` }
                 />
-              </div>
+              </Link>
             );
           }
           return undefined;
