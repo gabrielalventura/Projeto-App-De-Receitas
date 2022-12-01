@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import '../styles/Cards.css';
 
 function Cards(props) {
   const {
@@ -15,6 +16,7 @@ function Cards(props) {
   return (
     <div>
       <img
+        className="card-image"
         data-testid={ `${index}-horizontal-image` }
         src={ image }
         alt={ name }
@@ -34,6 +36,7 @@ function Cards(props) {
       <button
         data-testid={ `${index}-horizontal-share-btn` }
         type="button"
+        src="src/images/shareIcon.svg"
       // onClick={ handleShare }
       >
         Share
@@ -41,9 +44,10 @@ function Cards(props) {
       <button
         data-testid={ `${index}-horizontal-favorite-btn` }
         type="button"
+        src="src/images/blackHeartIcon.svg"
       // onClick={ handleFavorite }
       >
-        Favorite
+        Unfavorite
       </button>
     </div>
   );
