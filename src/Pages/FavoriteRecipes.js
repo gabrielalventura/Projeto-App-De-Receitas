@@ -1,12 +1,11 @@
 // import React, { useState, useEffect } from 'react';
-// import clipboardCopy from 'clipboard-copy';
 import React from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Cards from '../components/Cards';
 
 function FavoriteRecipes() {
-  // const [faveRecipes, setFaveRecipes] = useState([]);
+  // const { faveRecipes, setFaveRecipes} = useContext(AppProvider)
 
   // const retrieveFaveRecipes = localStorage.getItem('favoriteRecipes');
 
@@ -15,22 +14,22 @@ function FavoriteRecipes() {
   // }, [retrieveFaveRecipes]);
 
   const faveRecipes = [{ // usada para testar a renderização dos cards
-    id: 123,
+    id: '52771',
     type: 'meal',
-    nationality: 'Brazilian',
-    category: 'Category',
+    nationality: 'Italian',
+    category: 'Vegetarian',
     alcoholicOrNot: '',
-    name: 'NomeDaReceita',
-    image: 'imagemDaReceita',
+    name: 'Spicy Arrabiata Penne',
+    image: 'https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg',
   },
   {
     id: 456,
     type: 'drink',
     nationality: '',
-    category: 'Category',
-    alcoholicOrNot: 'alcoholic',
-    name: 'NomeDaReceita',
-    image: 'imagemDaReceita',
+    category: '',
+    alcoholicOrNot: 'Alcoholic',
+    name: 'Aquamarine',
+    image: 'https://www.thecocktaildb.com/images/media/drink/zvsre31572902738.jpg',
   },
   ];
 
@@ -65,13 +64,14 @@ function FavoriteRecipes() {
       {
         faveRecipes.map((recipe, index) => (<Cards
           key={ index }
-          image={ recipe.image } // sucessivamente
+          image={ recipe.image }
           name={ recipe.name }
           nationality={ recipe.nationality }
           category={ recipe.category }
           type={ recipe.type }
-          alcohool={ recipe.alcoholicOrNot }
+          alcohol={ recipe.alcoholicOrNot }
           index={ index }
+          id={ recipe.id }
         />))
       }
       <Footer />

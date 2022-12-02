@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+import '../styles/DoneCards.css';
 import AppContext from '../context/AppContext';
-import '../styles/Cards.css';
 
 const copy = require('clipboard-copy');
 
-function Cards(props) {
+function DoneCards(props) {
   const {
     image,
     name,
@@ -14,11 +14,12 @@ function Cards(props) {
     type,
     alcohol,
     index,
+    doneDate,
+    tags,
     id,
   } = props;
 
-  const { faveRecipes, setFaveRecipes, wasShared, setWasShared } = useContext(AppContext);
-  // const [wasShared, setWasShared] = useState(false); // usar para construir ternário com msg "Link copied!"
+  const { wasShared, setWasShared } = useContext(AppContext);
 
   const handleShare = ({ target }) => {
     const recipeID = target.name;
@@ -33,60 +34,65 @@ function Cards(props) {
     }
   };
 
-  const handleFavorite = ({ target }) => { // req 54: testar quando tivermos o local storage todo configurado
-    const targetID = target.value;
-    const newArray = faveRecipes.filter((recipe) => recipe.id !== targetID);
-    setFaveRecipes(newArray);
-  };
-
   return (
     <div>
       <img
-        className="card-image"
+        className="doneCard-image"
         data-testid={ `${index}-horizontal-image` }
         src={ image }
-        alt={ name }
+        alt="recipe-img"
       />
       <h3 data-testid={ `${index}-horizontal-name` }>{ name }</h3>
+      <span
+        data-testid={ `${index}-horizontal-done-date` }
+      >
+        { doneDate }
+      </span>
       {
         type === 'meal'
           ? (
-            <h4
-              data-testid={ `${index}-horizontal-top-text` }
-            >
-              {`${nationality} - ${category}`}
-            </h4>)
+            <>
+              <h4
+                data-testid={ `${index}-horizontal-top-text` }
+              >
+                {`${nationality} - ${category}`}
+              </h4>
+              <div>
+                {
+                  tags.map((tagName) => (
+                    <p
+                      key={ `${tagName}` }
+                      data-testid={ `${index}-${tagName}-horizontal-tag` }
+                    >
+                      { `${tagName}` }
+                    </p>
+                  ))
+                }
+              </div>
+            </>)
           : (
             <h4 data-testid={ `${index}-horizontal-top-text` }>{alcohol}</h4>)
       }
       <button
-        data-testid={ `${index}-horizontal-share-btn` }
         type="button"
-        name={ id }
-        value={ type }
+        data-testid={ `${index}-horizontal-share-btn` }
         src="src/images/shareIcon.svg"
         onClick={ handleShare }
+        name={ id }
+        value={ type }
       >
         Share
       </button>
-      <button
-        data-testid={ `${index}-horizontal-favorite-btn` }
-        type="button"
-        value={ id }
-        src="src/images/blackHeartIcon.svg"
-        onClick={ handleFavorite }
-      >
-        Unfavorite
-      </button>
-      <br />
       <div>
-        { wasShared && <p>Link copied!</p>}
+        {
+          wasShared && <p>Link copied!</p>
+        }
       </div>
     </div>
   );
 }
 
-Cards.propTypes = {
+DoneCards.propTypes = {
   image: PropTypes.string,
   name: PropTypes.string,
   nationality: PropTypes.string,
@@ -94,6 +100,8 @@ Cards.propTypes = {
   type: PropTypes.string,
   alcohol: PropTypes.string,
   index: PropTypes.string,
+  doneDate: PropTypes.string,
+  tags: PropTypes.arrayOf(),
 }.isRequired;
 
-export default Cards;
+export default DoneCards;

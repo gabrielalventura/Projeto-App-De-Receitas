@@ -1,14 +1,25 @@
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import AppContext from '../context/AppContext';
 import useFetch from '../hooks/useFetch';
 import Header from '../components/Header';
 
 function Drinks() {
   const {
-    data: { drinks },
-  } = useFetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
-  const {
-    data: { drinks: categorysDrinks },
-  } = useFetch('https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list');
+    fetchDrinksCategory: { data: { drinks: categorysDrinks } },
+    fetchDrinks: { data },
+  } = useContext(AppContext) || [];
+  const [selectedFilterCategory, setSelectedFilterCategory] = useState([]);
+  const [dataDrinks, setDataDrinks] = useState([]);
+  const filteredByCategory = useFetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${selectedFilterCategory[0]}`);
+  useEffect(() => {
+    if (selectedFilterCategory.length > 0) {
+      setDataDrinks(filteredByCategory.data);
+    } else {
+      setDataDrinks(data);
+    }
+  }, [data, selectedFilterCategory, filteredByCategory]);
+
   return (
     <div>
       <Header title="Drinks" />
@@ -23,25 +34,44 @@ function Drinks() {
                 key={ index }
                 type="button"
                 data-testid={ `${strCategory}-category-filter` }
+                onClick={ ({ target }) => {
+                  if (target.innerHTML === selectedFilterCategory[0]) {
+                    return setSelectedFilterCategory([]);
+                  }
+                  setSelectedFilterCategory([target.innerHTML]);
+                } }
               >
                 {strCategory}
               </button>
             );
-          } return undefined;
+          }
+          return undefined;
         })}
-      {drinks
-        && drinks.map((drink, key) => {
+      <button
+        type="button"
+        onClick={ () => setSelectedFilterCategory([]) }
+        data-testid="All-category-filter"
+      >
+        All
+      </button>
+      {dataDrinks.drinks
+        && dataDrinks.drinks.map((drink, key) => {
+          const link = `/drinks/${drink.idDrink}`;
           const twelve = 12;
           if (key < twelve) {
             return (
-              <div key={ key } data-testid={ `${key}-recipe-card` }>
+              <Link
+                key={ key }
+                data-testid={ `${key}-recipe-card` }
+                to={ link }
+              >
                 <p data-testid={ `${key}-card-name` }>{drink.strDrink}</p>
                 <img
                   src={ drink.strDrinkThumb }
                   alt={ `receita do drink ${drink.strDrink}` }
                   data-testid={ `${key}-card-img` }
                 />
-              </div>
+              </Link>
             );
           }
           return undefined;
