@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 function CheckBoxIngredients(props) {
   const [done, setDone] = useState(false);
@@ -29,5 +30,9 @@ function CheckBoxIngredients(props) {
     </label>
   );
 }
+
+CheckBoxIngredients.propTypes = {
+  ingredient: PropTypes.arrayOf(PropTypes.string),
+}.isRequired;
 
 export default CheckBoxIngredients;
