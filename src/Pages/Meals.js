@@ -5,7 +5,7 @@ import Header from '../components/Header';
 import AppContext from '../context/AppContext';
 
 function Meals() {
-  /* const { setRecipes } = useContext(AppContext);
+  const { setRecipes } = useContext(AppContext);
   const {
   
     data: { meals },
@@ -17,7 +17,7 @@ function Meals() {
 
   useEffect(() => {
     setRecipes(meals);
-  }, [meals]); */
+  }, [meals]);
   
     fetchFoodsCategorys: { data: { meals: categorysFoods } },
     fetchMeals: { data },
