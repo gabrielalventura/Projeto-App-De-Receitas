@@ -58,6 +58,7 @@ function DoneRecipes() {
               index={ index }
               doneDate={ recipe.doneDate }
               tags={ recipe.tags }
+              id={ recipe.id }
             />))
           }
         </section>

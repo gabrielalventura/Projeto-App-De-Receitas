@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import AppContext from '../context/AppContext';
 import '../styles/Cards.css';
@@ -17,8 +17,8 @@ function Cards(props) {
     id,
   } = props;
 
-  const { faveRecipes, setFaveRecipes } = useContext(AppContext);
-  const [wasShared, setWasShared] = useState(false); // usar para construir ternário com msg "Link copied!"
+  const { faveRecipes, setFaveRecipes, wasShared, setWasShared } = useContext(AppContext);
+  // const [wasShared, setWasShared] = useState(false); // usar para construir ternário com msg "Link copied!"
 
   const handleShare = ({ target }) => {
     const recipeID = target.name;
