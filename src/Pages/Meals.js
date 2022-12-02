@@ -21,7 +21,7 @@ function Meals() {
       setDataFoods(data);
     }
   }, [filteredCategoryFood, data, selectedFilterCategory]);
-  
+
   useEffect(() => {
     setRecipes(meals);
   }, [meals]);
