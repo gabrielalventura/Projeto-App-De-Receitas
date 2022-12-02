@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import '../styles/DoneCards.css';
+import AppContext from '../context/AppContext';
+
+const copy = require('clipboard-copy');
 
 function DoneCards(props) {
   const {
@@ -13,7 +16,23 @@ function DoneCards(props) {
     index,
     doneDate,
     tags,
+    id,
   } = props;
+
+  const { wasShared, setWasShared } = useContext(AppContext);
+
+  const handleShare = ({ target }) => {
+    const recipeID = target.name;
+    const recipeType = target.value;
+
+    if (recipeType === 'meal') {
+      copy(`http://localhost:3000/meals/${recipeID}`);
+      setWasShared(true);
+    } else {
+      copy(`http://localhost:3000/drinks/${recipeID}`);
+      setWasShared(true);
+    }
+  };
 
   return (
     <div>
@@ -58,10 +77,17 @@ function DoneCards(props) {
         type="button"
         data-testid={ `${index}-horizontal-share-btn` }
         src="src/images/shareIcon.svg"
-        onClick={ console.log('Clicou') }
+        onClick={ handleShare }
+        name={ id }
+        value={ type }
       >
         Share
       </button>
+      <div>
+        {
+          wasShared && <p>Link copied!</p>
+        }
+      </div>
     </div>
   );
 }
