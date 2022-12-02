@@ -1,0 +1,7 @@
+.ingredients-label-true {
+  text-decoration: line-through solid black;
+}
+
+.ingredients-label-false {
+  text-decoration: none;
+}
