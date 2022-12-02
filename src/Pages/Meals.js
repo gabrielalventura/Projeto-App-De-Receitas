@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import useFetch from '../hooks/useFetch';
 import Header from '../components/Header';
+import AppContext from '../context/AppContext';
 
 function Meals() {
+  const { setRecipes } = useContext(AppContext);
   const {
     data: { meals },
   } = useFetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+
   const {
     data: { meals: categorysFoods },
   } = useFetch('https://www.themealdb.com/api/json/v1/1/list.php?c=list');
+
+  useEffect(() => {
+    setRecipes(meals);
+  }, [meals]);
   return (
     <div>
       <Header title="Meals" />
