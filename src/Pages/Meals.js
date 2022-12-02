@@ -5,9 +5,9 @@ import Header from '../components/Header';
 import AppContext from '../context/AppContext';
 
 function Meals() {
-  const { setRecipes } = useContext(AppContext);
+  /* const { setRecipes } = useContext(AppContext);
   const {
-  /*
+  
     data: { meals },
   } = useFetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
 
