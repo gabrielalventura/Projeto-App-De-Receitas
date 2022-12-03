@@ -28,7 +28,7 @@ function AppProvider({ children }) {
     setRecipes,
   }), [user, fetchDrinks,
     fetchDrinksCategory, fetchMeals, fetchFoodsCategorys,
-    faveRecipes, setFaveRecipes, wasShared, setWasShared, user, recipes]);
+    faveRecipes, setFaveRecipes, wasShared, setWasShared, recipes]);
 
   return (
     <AppContext.Provider value={ values }>
