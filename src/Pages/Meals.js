@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import useFetch from '../hooks/useFetch';
 import Header from '../components/Header';
@@ -21,10 +21,9 @@ function Meals() {
       setDataFoods(data);
     }
   }, [filteredCategoryFood, data, selectedFilterCategory]);
-
   useEffect(() => {
-    setRecipes(meals);
-  }, [meals]);
+    setRecipes(data);
+  }, [data]);
 
   return (
     <div>
