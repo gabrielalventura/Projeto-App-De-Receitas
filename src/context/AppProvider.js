@@ -12,6 +12,10 @@ function AppProvider({ children }) {
   const fetchFoodsCategorys = useFetch('https://www.themealdb.com/api/json/v1/1/list.php?c=list');
   const [faveRecipes, setFaveRecipes] = useState([]);
   const [wasShared, setWasShared] = useState(false); // usar para construir ternário com msg "Link copied!"
+  const [inProgress, setInProgress] = useState({
+    meals: [],
+    drinks: [],
+  });
 
   const values = useMemo(() => ({
     user,
@@ -26,9 +30,11 @@ function AppProvider({ children }) {
     setWasShared,
     recipes,
     setRecipes,
+    inProgress,
+    setInProgress,
   }), [user, fetchDrinks,
     fetchDrinksCategory, fetchMeals, fetchFoodsCategorys,
-    faveRecipes, setFaveRecipes, wasShared, setWasShared, recipes]);
+    faveRecipes, setFaveRecipes, wasShared, setWasShared, recipes, inProgress]);
 
   return (
     <AppContext.Provider value={ values }>
