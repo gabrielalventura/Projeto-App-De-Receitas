@@ -8,11 +8,8 @@ function DoneRecipes() {
   // const doneRecipes = localStorage.getItem('doneRecipes');
   // const [doneRecipesState, setDoneRecipesState] = ([]);
   const [filtered, setFiltered] = useState([]);
-  // let savedRecipes = doneRecipes;
-  // console.log(savedRecipes);
 
   const handleFilter = ({ target }) => {
-    // let savedRecipes = doneRecipes;
     const chooseFilter = target.name;
 
     if (chooseFilter === 'all') {
@@ -30,16 +27,10 @@ function DoneRecipes() {
     }
   };
 
-  // useEffect(() => {
-  //   setDoneRecipesState(doneRecipes);
-  // }, [doneRecipes]);
-
   useEffect(() => {
     setFiltered(doneRecipes);
   }, []);
 
-  // console.log(doneRecipes);
-  // const [doneRecipesState] = useState(doneRecipes); // teste da renderização
   // const [filtered, setFiltered] = useState([]);
 
   return (
