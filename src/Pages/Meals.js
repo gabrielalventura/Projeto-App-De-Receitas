@@ -1,13 +1,14 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import useFetch from '../hooks/useFetch';
 import Header from '../components/Header';
 import AppContext from '../context/AppContext';
-import useFetch from '../hooks/useFetch';
 
 function Meals() {
   const {
     fetchFoodsCategorys: { data: { meals: categorysFoods } },
     fetchMeals: { data },
+    setRecipes,
   } = useContext(AppContext) || [];
   const [selectedFilterCategory, setSelectedFilterCategory] = useState([]);
   const [dataFoods, setDataFoods] = useState([]);
@@ -20,6 +21,9 @@ function Meals() {
       setDataFoods(data);
     }
   }, [filteredCategoryFood, data, selectedFilterCategory]);
+  useEffect(() => {
+    setRecipes(data);
+  }, [data]);
 
   return (
     <div>
