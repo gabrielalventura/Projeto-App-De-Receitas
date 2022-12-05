@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import doneRecipes from '../tests/helpers/mockDoneRecipes';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -7,13 +7,31 @@ import DoneCards from '../components/DoneCards';
 function DoneRecipes() {
   // const doneRecipes = localStorage.getItem('doneRecipes');
   // const [doneRecipesState, setDoneRecipesState] = ([]);
+  const [filtered, setFiltered] = useState([]);
 
-  // useEffect(() => {
-  //   setDoneRecipesState(doneRecipes);
-  // }, [doneRecipes]);
+  const handleFilter = ({ target }) => {
+    const chooseFilter = target.name;
 
-  // console.log(doneRecipes);
-  const [doneRecipesState] = useState(doneRecipes); // teste da renderização
+    if (chooseFilter === 'all') {
+      setFiltered(doneRecipes);
+    }
+    if (chooseFilter === 'drinks') {
+      setFiltered(doneRecipes.filter((recipe) => (
+        recipe.type === 'drink'
+      )));
+    }
+    if (chooseFilter === 'meals') {
+      setFiltered(doneRecipes.filter((recipe) => (
+        recipe.type === 'meal'
+      )));
+    }
+  };
+
+  useEffect(() => {
+    setFiltered(doneRecipes);
+  }, []);
+
+  // const [filtered, setFiltered] = useState([]);
 
   return (
     <>
@@ -24,7 +42,7 @@ function DoneRecipes() {
             name="all"
             type="button"
             data-testid="filter-by-all-btn"
-            // onClick={ () => console.log('Clicou') }
+            onClick={ handleFilter }
           >
             All
           </button>
@@ -32,7 +50,7 @@ function DoneRecipes() {
             name="meals"
             type="button"
             data-testid="filter-by-meal-btn"
-            // onClick={ () => console.log('Clicou') }
+            onClick={ handleFilter }
           >
             Meals
           </button>
@@ -40,14 +58,14 @@ function DoneRecipes() {
             name="drinks"
             type="button"
             data-testid="filter-by-drink-btn"
-            // onClick={ () => console.log('Clicou') }
+            onClick={ handleFilter }
           >
             Drinks
           </button>
         </div>
         <section>
           {
-            doneRecipesState.map((recipe, index) => (<DoneCards
+            filtered.map((recipe, index) => (<DoneCards
               key={ index }
               image={ recipe.image }
               name={ recipe.name }
