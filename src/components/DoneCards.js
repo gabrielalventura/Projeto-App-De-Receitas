@@ -1,9 +1,11 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import Share from './Share';
 import '../styles/DoneCards.css';
 import AppContext from '../context/AppContext';
 
-const copy = require('clipboard-copy');
+// const copy = require('clipboard-copy');
 
 function DoneCards(props) {
   const {
@@ -19,30 +21,34 @@ function DoneCards(props) {
     id,
   } = props;
 
-  const { wasShared, setWasShared } = useContext(AppContext);
+  const { wasShared } = useContext(AppContext);
 
-  const handleShare = ({ target }) => {
-    const recipeID = target.name;
-    const recipeType = target.value;
+  // const handleShare = ({ target }) => {
+  //   const recipeID = target.name;
+  //   const recipeType = target.value;
 
-    if (recipeType === 'meal') {
-      copy(`http://localhost:3000/meals/${recipeID}`);
-      setWasShared(true);
-    } else {
-      copy(`http://localhost:3000/drinks/${recipeID}`);
-      setWasShared(true);
-    }
-  };
+  //   if (recipeType === 'meal') {
+  //     copy(`http://localhost:3000/meals/${recipeID}`);
+  //     setWasShared(true);
+  //   } else {
+  //     copy(`http://localhost:3000/drinks/${recipeID}`);
+  //     setWasShared(true);
+  //   }
+  // };
 
   return (
     <div>
-      <img
-        className="doneCard-image"
-        data-testid={ `${index}-horizontal-image` }
-        src={ image }
-        alt="recipe-img"
-      />
-      <h3 data-testid={ `${index}-horizontal-name` }>{ name }</h3>
+      <Link
+        to={ type === 'meal' ? `/meals/${id}` : `/drinks/${id}` }
+      >
+        <img
+          className="doneCard-image"
+          data-testid={ `${index}-horizontal-image` }
+          src={ image }
+          alt="recipe-img"
+        />
+        <h3 data-testid={ `${index}-horizontal-name` }>{ name }</h3>
+      </Link>
       <span
         data-testid={ `${index}-horizontal-done-date` }
       >
@@ -73,7 +79,7 @@ function DoneCards(props) {
           : (
             <h4 data-testid={ `${index}-horizontal-top-text` }>{alcohol}</h4>)
       }
-      <button
+      {/* <button
         type="button"
         data-testid={ `${index}-horizontal-share-btn` }
         src="src/images/shareIcon.svg"
@@ -82,7 +88,13 @@ function DoneCards(props) {
         value={ type }
       >
         Share
-      </button>
+      </button> */}
+      <Share
+        index={ index }
+        type={ type }
+        id={ id }
+        testid={ `${index}-horizontal-share-btn` }
+      />
       <div>
         {
           wasShared && <p>Link copied!</p>

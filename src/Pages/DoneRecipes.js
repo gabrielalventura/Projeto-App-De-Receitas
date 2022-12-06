@@ -5,7 +5,7 @@ import Footer from '../components/Footer';
 import DoneCards from '../components/DoneCards';
 
 function DoneRecipes() {
-  // const doneRecipes = localStorage.getItem('doneRecipes');
+  // const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
   // const [doneRecipesState, setDoneRecipesState] = ([]);
   const [filtered, setFiltered] = useState([]);
 
