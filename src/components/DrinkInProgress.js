@@ -9,6 +9,13 @@ function DrinkInProgress(props) {
   const { recipe, ingredients } = props;
   const { inProgress, wasShared } = useContext(AppContext);
   const [able, setAble] = useState(false);
+  const {
+    idDrink,
+    strDrink,
+    strCategory,
+    strDrinkThumb,
+    strAlcoholic,
+  } = recipe[0];
 
   const validateIngredients = () => {
     const doneSteps = inProgress.drinks.filter((element) => (
@@ -28,6 +35,18 @@ function DrinkInProgress(props) {
   const history = useHistory();
 
   const finishRecipe = () => {
+    const dateNow = new Date();
+    const newRecipe = {
+      id: idDrink,
+      nationality: '',
+      name: strDrink,
+      category: strCategory,
+      image: strDrinkThumb,
+      tags: [],
+      alcoholicOrNot: strAlcoholic,
+      type: 'drink',
+      doneDate: dateNow.toISOString(),
+    };
     let newArray = [];
     let actualDone = JSON.parse(localStorage.getItem('doneRecipes'));
     if (actualDone === null) {
@@ -35,16 +54,16 @@ function DrinkInProgress(props) {
     }
     const actualArray = [...actualDone];
     const alreadyDone = actualArray.some((element) => (
-      element.idMeal === recipe[0].idMeal
+      element.idDrink === recipe[0].idDrink
     ));
     if (actualArray.length > 0 && !alreadyDone) {
       const savedRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
-      newArray = [...savedRecipes, recipe[0]];
+      newArray = [...savedRecipes, newRecipe];
     } else if (actualArray.length > 0 && alreadyDone) {
       const savedRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
       newArray = [...savedRecipes];
     } else {
-      newArray = [recipe[0]];
+      newArray = [newRecipe];
     }
     localStorage.setItem('doneRecipes', JSON.stringify(newArray));
     history.push('/done-recipes');
@@ -56,6 +75,7 @@ function DrinkInProgress(props) {
         src={ recipe[0].strDrinkThumb }
         alt={ recipe[0].strDrink }
         data-testid="recipe-photo"
+        className="card-image"
       />
       <h3 data-testid="recipe-title">{ recipe[0].strDrink }</h3>
       <Share

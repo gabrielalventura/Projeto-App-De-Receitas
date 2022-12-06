@@ -9,7 +9,7 @@ function CheckBoxIngredients(props) {
   const [isLoading, setIsLoading] = useState(true);
 
   const verifyProgress = () => {
-    if (localStorage.getItem('inProgressRecipes')) {
+    if (localStorage.getItem('inProgressRecipes') !== null) {
       const savedProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
       let result = false;
       if (Object.keys(recipe).includes('idMeal')) {
@@ -25,10 +25,10 @@ function CheckBoxIngredients(props) {
       setDone(result);
       setInProgress(savedProgress);
     }
-    setTimeout(() => {
-      setIsLoading(false);
-    }, '');
-    // setIsLoading(false);
+    // setTimeout(() => {
+    //   setIsLoading(false);
+    // }, '');
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -36,66 +36,100 @@ function CheckBoxIngredients(props) {
   }, []);
 
   const removeItemMeal = async (id) => {
-    await setInProgress({
-      ...inProgress,
-      meals: inProgress.meals.filter((element) => (
-        (element.id !== id)
+    if (inProgress.meals[0].ingredient !== ingredient) {
+      setInProgress({
+        ...inProgress,
+        meals: inProgress.meals.filter((element) => (
+          (element.id !== id)
+          || (element.id === id && element.ingredient !== ingredient)
+        )),
+      });
+    }
+    if (inProgress.meals[0].ingredient === ingredient) {
+      await setInProgress({
+        ...inProgress,
+        meals: inProgress.meals.filter((element) => (
+          (element.id !== id)
+          || (element.id === id && element.ingredient !== ingredient)
+        )),
+      });
+      const storage = JSON.parse(localStorage.getItem('inProgressRecipes'));
+      const newStorage = {
+        drinks: storage.drinks,
+        meals: storage.meals.filter((element) => (
+          (element.id !== id)
         || (element.id === id && element.ingredient !== ingredient)
-      )),
-    });
-    // localStorage.setItem('inProgressRecipes', JSON.stringify(inProgress));
+        )) };
+      localStorage.setItem('inProgressRecipes', JSON.stringify(newStorage));
+    }
   };
 
   const addItemMeal = async (id) => {
-    await setInProgress({
+    setInProgress({
       ...inProgress,
       meals: [...inProgress.meals, { id, ingredient }],
     });
-    // localStorage.setItem('inProgressRecipes', JSON.stringify(inProgress));
   };
 
   const removeItemDrink = async (id) => {
-    setInProgress({
-      ...inProgress,
-      drinks: inProgress.drinks.filter((element) => (
-        (element.id !== id)
+    if (inProgress.drinks[0].ingredient !== ingredient) {
+      setInProgress({
+        ...inProgress,
+        drinks: inProgress.drinks.filter((element) => (
+          (element.id !== id)
+          || (element.id === id && element.ingredient !== ingredient)
+        )),
+      });
+    }
+    if (inProgress.drinks[0].ingredient === ingredient) {
+      await setInProgress({
+        ...inProgress,
+        drinks: inProgress.drinks.filter((element) => (
+          (element.id !== id)
+          || (element.id === id && element.ingredient !== ingredient)
+        )),
+      });
+      const storage = JSON.parse(localStorage.getItem('inProgressRecipes'));
+      const newStorage = {
+        meals: storage.meals,
+        drinks: storage.drinks.filter((element) => (
+          (element.id !== id)
         || (element.id === id && element.ingredient !== ingredient)
-      )),
-    });
-    // localStorage.setItem('inProgressRecipes', JSON.stringify(inProgress));
+        )) };
+      localStorage.setItem('inProgressRecipes', JSON.stringify(newStorage));
+    }
   };
 
-  const addItemDrink = (id) => {
+  const addItemDrink = async (id) => {
     setInProgress({
       ...inProgress,
       drinks: [...inProgress.drinks, { id, ingredient }],
     });
-    // localStorage.setItem('inProgressRecipes', JSON.stringify(inProgress));
   };
 
-  const handleChange = () => {
+  const handleChange = async () => {
     if (done) {
-      setDone(false);
       if (Object.keys(recipe).includes('idMeal')) {
         removeItemMeal(recipe.idMeal);
       } else {
         removeItemDrink(recipe.idDrink);
       }
+      setDone(false);
     } else {
-      setDone(true);
       if (Object.keys(recipe).includes('idMeal')) {
         addItemMeal(recipe.idMeal);
       } else {
         addItemDrink(recipe.idDrink);
       }
+      setDone(true);
     }
   };
 
   useEffect(() => {
-    if (inProgress.meals.length !== 0 && inProgress.drinks !== 0) {
+    if (inProgress.meals.length > 0 || inProgress.drinks.length > 0) {
       localStorage.setItem('inProgressRecipes', JSON.stringify(inProgress));
     }
-  }, [done]);
+  }, [inProgress]);
 
   return (
     <div>

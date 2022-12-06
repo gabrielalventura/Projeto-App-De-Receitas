@@ -9,6 +9,14 @@ function MealInProgress(props) {
   const { recipe, ingredients } = props;
   const { inProgress, wasShared } = useContext(AppContext);
   const [able, setAble] = useState(false);
+  const {
+    idMeal,
+    strArea,
+    strMeal,
+    strCategory,
+    strMealThumb,
+    strTags,
+  } = recipe[0];
 
   const validateIngredients = () => {
     const doneSteps = inProgress.meals.filter((element) => (
@@ -28,6 +36,18 @@ function MealInProgress(props) {
   const history = useHistory();
 
   const finishRecipe = () => {
+    const dateNow = new Date();
+    const newRecipe = {
+      id: idMeal,
+      nationality: strArea,
+      name: strMeal,
+      category: strCategory,
+      image: strMealThumb,
+      tags: strTags.split(','),
+      alcoholicOrNot: '',
+      type: 'meal',
+      doneDate: dateNow.toISOString(),
+    };
     let newArray = [];
     let actualDone = JSON.parse(localStorage.getItem('doneRecipes'));
     if (actualDone === null) {
@@ -39,12 +59,12 @@ function MealInProgress(props) {
     ));
     if (actualArray.length > 0 && !alreadyDone) {
       const savedRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
-      newArray = [...savedRecipes, recipe[0]];
+      newArray = [...savedRecipes, newRecipe];
     } else if (actualArray.length > 0 && alreadyDone) {
       const savedRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
       newArray = [...savedRecipes];
     } else {
-      newArray = [recipe[0]];
+      newArray = [newRecipe];
     }
     localStorage.setItem('doneRecipes', JSON.stringify(newArray));
     history.push('/done-recipes');

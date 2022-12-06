@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-// import AppContext from '../context/AppContext';
 import mockMeals from '../helpers/mockMealInProgress';
 import mockDrink from '../helpers/mockDrinkInProgress';
 import MealInProgress from '../components/MealInProgress';
@@ -22,6 +21,7 @@ function RecipeInProgress() {
   if (type === 'drinks') {
     recipes = mockDrink;
   }
+  console.log(type);
   // deverá ser obtido após clicar no start recipe da página de detalhes
   // const { recipes } = useContext(AppContext);
   const history = useHistory();
@@ -32,18 +32,20 @@ function RecipeInProgress() {
         re.idMeal === id
       ));
       setRecipe(newRecipe);
-      setTimeout(() => {
-        setLoading(false);
-      }, '');
+      // setTimeout(() => {
+      //   setLoading(false);
+      // }, '0');
+      setLoading(false);
     }
     if (type === 'drinks') {
       const newRecipe = recipes.filter((re) => (
         re.idDrink === id
       ));
       setRecipe(newRecipe);
-      setTimeout(() => {
-        setLoading(false);
-      }, '');
+      // setTimeout(() => {
+      //   setLoading(false);
+      // }, '0');
+      setLoading(false);
     }
   };
 
