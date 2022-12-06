@@ -1,5 +1,4 @@
-// import React, { useState, useEffect } from 'react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Cards from '../components/Cards';
@@ -33,6 +32,30 @@ function FavoriteRecipes() {
   },
   ];
 
+  const [filtered, setFiltered] = useState([]);
+
+  const handleFilter = ({ target }) => {
+    const chooseFilter = target.name;
+
+    if (chooseFilter === 'all') {
+      setFiltered(faveRecipes);
+    }
+    if (chooseFilter === 'drinks') {
+      setFiltered(faveRecipes.filter((recipe) => (
+        recipe.type === 'drink'
+      )));
+    }
+    if (chooseFilter === 'meals') {
+      setFiltered(faveRecipes.filter((recipe) => (
+        recipe.type === 'meal'
+      )));
+    }
+  };
+
+  useEffect(() => {
+    setFiltered(faveRecipes);
+  }, []);
+
   return (
     <div>
       <Header title="Favorite Recipes" />
@@ -41,28 +64,31 @@ function FavoriteRecipes() {
         <button
           data-testid="filter-by-all-btn"
           type="button"
-          // onClick={ handleFilterAll }
+          name="all"
+          onClick={ handleFilter }
         >
           All
         </button>
         <button
           data-testid="filter-by-meal-btn"
           type="button"
-          // onClick={ handleFilterMeals }
+          name="meals"
+          onClick={ handleFilter }
         >
           Meals
         </button>
         <button
           data-testid="filter-by-drink-btn"
           type="button"
-          // onClick={ handleFilterDrinks }
+          name="drinks"
+          onClick={ handleFilter }
         >
           Drinks
         </button>
       </div>
       <br />
       {
-        faveRecipes.map((recipe, index) => (<Cards
+        filtered.map((recipe, index) => (<Cards
           key={ index }
           image={ recipe.image }
           name={ recipe.name }

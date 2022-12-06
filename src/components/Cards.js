@@ -1,10 +1,8 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import AppContext from '../context/AppContext';
-import '../styles/Cards.css';
 import Share from './Share';
-
-// const copy = require('clipboard-copy');
+import '../styles/Cards.css';
 
 function Cards(props) {
   const {
