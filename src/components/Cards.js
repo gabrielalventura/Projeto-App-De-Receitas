@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import AppContext from '../context/AppContext';
 import Share from './Share';
 import '../styles/Cards.css';
@@ -40,13 +41,17 @@ function Cards(props) {
 
   return (
     <div>
-      <img
-        className="card-image"
-        data-testid={ `${index}-horizontal-image` }
-        src={ image }
-        alt={ name }
-      />
-      <h3 data-testid={ `${index}-horizontal-name` }>{ name }</h3>
+      <Link
+        to={ type === 'meal' ? `/meals/${id}` : `/drinks/${id}` }
+      >
+        <img
+          className="card-image"
+          data-testid={ `${index}-horizontal-image` }
+          src={ image }
+          alt={ name }
+        />
+        <h3 data-testid={ `${index}-horizontal-name` }>{ name }</h3>
+      </Link>
       {
         type === 'meal'
           ? (
@@ -58,16 +63,6 @@ function Cards(props) {
           : (
             <h4 data-testid={ `${index}-horizontal-top-text` }>{alcohol}</h4>)
       }
-      {/* <button
-        data-testid={ `${index}-horizontal-share-btn` }
-        type="button"
-        name={ id }
-        value={ type }
-        src="src/images/shareIcon.svg"
-        onClick={ handleShare }
-      >
-        Share
-      </button> */}
       <Share
         index={ index }
         type={ type }
