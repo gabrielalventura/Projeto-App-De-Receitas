@@ -5,7 +5,7 @@ import Profile from './Pages/Profile';
 import FavoriteRecipes from './Pages/FavoriteRecipes';
 import DoneRecipes from './Pages/DoneRecipes';
 import Recipes from './Pages/Recipes';
-import RecipesDetails from './components/DoneRecipes/RecipesDetails';
+import RecipesDetails from './components/RecipeDetails/RecipeDetails';
 
 function Routes() {
   return (
