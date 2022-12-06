@@ -6,7 +6,7 @@ import { converStrToId } from './HelperRecipesDetails';
 function RecipesDetails({ history }) {
   const [selectedCategory, setSelectedCategory] = useState({});
   const urlInclude = converStrToId(history.location.pathname);
-  const { fetchDrinks, fetchMeals } = useContext(AppContext);
+  const dataContext = useContext(AppContext);
 
   useEffect(() => {
     async function fetchDrinksOrFoods() {
@@ -21,13 +21,17 @@ function RecipesDetails({ history }) {
         ${json.drinks[0].strCategory}`;
 
         const objectFinnaly = {
+          drinks: true,
           title: json.drinks[0].strDrink,
           thumb: json.drinks[0].strDrinkThumb,
           category: categoryAlcoholic,
           instructions: json.drinks[0].strInstructions,
           ingredients: filterIngredients.map((ingredient) => json.drinks[0][ingredient]),
           measures: filterMeasures.map((measure) => json.drinks[0][measure]),
-          drinkOrFood: fetchDrinks,
+          drinkOrFood: dataContext.fetchDrinks,
+          id: json.drinks[0].idDrink,
+          alcoholic: json.drinks[0].strAlcoholic,
+          simpleCategory: json.drinks[0].strCategory,
         };
         setSelectedCategory(objectFinnaly);
       } else if (history.location.pathname.includes('meal')) {
@@ -39,8 +43,8 @@ function RecipesDetails({ history }) {
 
         const filterMeasures = Object.keys(json.meals[0])
           .filter((meal) => meal.includes('strMeasure')) || [];
-
         const objectFinnaly = {
+          meals: true,
           linkYtb: json.meals[0].strYoutube,
           title: json.meals[0].strMeal,
           thumb: json.meals[0].strMealThumb,
@@ -48,13 +52,19 @@ function RecipesDetails({ history }) {
           instructions: json.meals[0].strInstructions,
           ingredients: filterIngredients.map((ingredient) => json.meals[0][ingredient]),
           measures: filterMeasures.map((measure) => json.meals[0][measure]),
-          drinkOrFood: fetchMeals,
+          drinkOrFood: dataContext.fetchMeals,
+          id: json.meals[0].idMeal,
         };
         setSelectedCategory(objectFinnaly);
       }
     }
     fetchDrinksOrFoods();
-  }, [history.location.pathname, urlInclude, fetchDrinks, fetchMeals]);
+  }, [
+    history.location.pathname,
+    urlInclude,
+    dataContext.fetchDrinks,
+    dataContext.fetchMeals,
+  ]);
 
   return (
     <div>
@@ -98,6 +108,16 @@ function RecipesDetails({ history }) {
         type="button"
         data-testid="start-recipe-btn"
         style={ { position: 'fixed', bottom: '0' } }
+        onClick={ () => {
+          if (history.location.pathname.includes('meal')) {
+            history.push(`/meals/${selectedCategory.id}/in-progress`);
+            dataContext.setRecipesInProgress([selectedCategory]);
+          } else {
+            history.push(`/drinks/${selectedCategory.id}/in-progress`);
+            console.log(selectedCategory);
+            dataContext.setRecipesInProgress([selectedCategory]);
+          }
+        } }
       >
         Start Recipe
       </button>
