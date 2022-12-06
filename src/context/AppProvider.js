@@ -6,6 +6,7 @@ import useFetch from '../hooks/useFetch';
 function AppProvider({ children }) {
   const [user, setUser] = useState({});
   const [recipes, setRecipes] = useState([]);
+  const [recipesInProgress, setRecipesInProgress] = useState({});
   const fetchDrinks = useFetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
   const fetchDrinksCategory = useFetch('https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list');
   const fetchMeals = useFetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
@@ -32,9 +33,23 @@ function AppProvider({ children }) {
     setRecipes,
     inProgress,
     setInProgress,
-  }), [user, fetchDrinks,
-    fetchDrinksCategory, fetchMeals, fetchFoodsCategorys,
-    faveRecipes, setFaveRecipes, wasShared, setWasShared, recipes, inProgress]);
+    recipesInProgress,
+    setRecipesInProgress,
+  }), [
+    user,
+    fetchDrinks,
+    fetchDrinksCategory,
+    fetchMeals,
+    fetchFoodsCategorys,
+    faveRecipes,
+    setFaveRecipes,
+    wasShared,
+    setWasShared,
+    recipes,
+    inProgress,
+    recipesInProgress,
+    setRecipesInProgress,
+  ]);
 
   return (
     <AppContext.Provider value={ values }>
