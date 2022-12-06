@@ -2,8 +2,9 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import AppContext from '../context/AppContext';
 import '../styles/Cards.css';
+import Share from './Share';
 
-const copy = require('clipboard-copy');
+// const copy = require('clipboard-copy');
 
 function Cards(props) {
   const {
@@ -17,21 +18,21 @@ function Cards(props) {
     id,
   } = props;
 
-  const { faveRecipes, setFaveRecipes, wasShared, setWasShared } = useContext(AppContext);
+  const { faveRecipes, setFaveRecipes, wasShared } = useContext(AppContext);
   // const [wasShared, setWasShared] = useState(false); // usar para construir ternário com msg "Link copied!"
 
-  const handleShare = ({ target }) => {
-    const recipeID = target.name;
-    const recipeType = target.value;
+  // const handleShare = ({ target }) => {
+  //   const recipeID = target.name;
+  //   const recipeType = target.value;
 
-    if (recipeType === 'meal') {
-      copy(`http://localhost:3000/meals/${recipeID}`);
-      setWasShared(true);
-    } else {
-      copy(`http://localhost:3000/drinks/${recipeID}`);
-      setWasShared(true);
-    }
-  };
+  //   if (recipeType === 'meal') {
+  //     copy(`http://localhost:3000/meals/${recipeID}`);
+  //     setWasShared(true);
+  //   } else {
+  //     copy(`http://localhost:3000/drinks/${recipeID}`);
+  //     setWasShared(true);
+  //   }
+  // };
 
   const handleFavorite = ({ target }) => { // req 54: testar quando tivermos o local storage todo configurado
     const targetID = target.value;
@@ -59,7 +60,7 @@ function Cards(props) {
           : (
             <h4 data-testid={ `${index}-horizontal-top-text` }>{alcohol}</h4>)
       }
-      <button
+      {/* <button
         data-testid={ `${index}-horizontal-share-btn` }
         type="button"
         name={ id }
@@ -68,7 +69,13 @@ function Cards(props) {
         onClick={ handleShare }
       >
         Share
-      </button>
+      </button> */}
+      <Share
+        index={ index }
+        type={ type }
+        id={ id }
+        testid={ `${index}-horizontal-share-btn` }
+      />
       <button
         data-testid={ `${index}-horizontal-favorite-btn` }
         type="button"
