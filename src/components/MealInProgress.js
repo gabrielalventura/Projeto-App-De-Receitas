@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import CheckBoxIngredients from './CheckBoxIngredients';
 import AppContext from '../context/AppContext';
+import Share from './Share';
 
 function MealInProgress(props) {
   const { recipe, ingredients } = props;
-  const { inProgress } = useContext(AppContext);
+  const { inProgress, wasShared } = useContext(AppContext);
   const [able, setAble] = useState(false);
 
   const validateIngredients = () => {
@@ -13,7 +15,6 @@ function MealInProgress(props) {
       element.id === recipe[0].idMeal
     ));
     if (doneSteps.length === ingredients.length) {
-      console.log('All Done');
       setAble(true);
     } else {
       setAble(false);
@@ -24,16 +25,50 @@ function MealInProgress(props) {
     validateIngredients();
   }, [inProgress]);
 
+  const history = useHistory();
+
+  const finishRecipe = () => {
+    let newArray = [];
+    let actualDone = JSON.parse(localStorage.getItem('doneRecipes'));
+    if (actualDone === null) {
+      actualDone = [];
+    }
+    const actualArray = [...actualDone];
+    const alreadyDone = actualArray.some((element) => (
+      element.idMeal === recipe[0].idMeal
+    ));
+    if (actualArray.length > 0 && !alreadyDone) {
+      const savedRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
+      newArray = [...savedRecipes, recipe[0]];
+    } else if (actualArray.length > 0 && alreadyDone) {
+      const savedRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
+      newArray = [...savedRecipes];
+    } else {
+      newArray = [recipe[0]];
+    }
+    localStorage.setItem('doneRecipes', JSON.stringify(newArray));
+    history.push('/done-recipes');
+  };
+
   return (
     <div>
       <img
         src={ recipe[0].strMealThumb }
         alt={ recipe[0].strMeal }
         data-testid="recipe-photo"
+        className="card-image"
       />
       <h3 data-testid="recipe-title">{ recipe[0].strMeal }</h3>
-      <button type="button" data-testid="share-btn">Share</button>
+      <Share
+        index="0"
+        type="meal"
+        id={ recipe[0].idMeal }
+        testid="share-btn"
+      />
       <button type="button" data-testid="favorite-btn">Favorite</button>
+      <div>
+        { wasShared && <p>Link copied!</p>}
+      </div>
       <h4 data-testid="recipe-category">{ recipe[0].strCategory }</h4>
       <ul>
         {
@@ -52,6 +87,7 @@ function MealInProgress(props) {
         type="button"
         data-testid="finish-recipe-btn"
         disabled={ !able }
+        onClick={ finishRecipe }
       >
         Finish
       </button>
