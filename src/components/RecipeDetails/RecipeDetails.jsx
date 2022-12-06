@@ -94,6 +94,13 @@ function RecipesDetails({ history }) {
         src={ selectedCategory.linkYtb }
         data-testid="video"
       />
+      <button
+        type="button"
+        data-testid="start-recipe-btn"
+        style={ { position: 'fixed', bottom: '0' } }
+      >
+        Start Recipe
+      </button>
     </div>
   );
 }
