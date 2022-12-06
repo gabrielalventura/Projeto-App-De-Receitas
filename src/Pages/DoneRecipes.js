@@ -1,12 +1,37 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import doneRecipes from '../tests/helpers/mockDoneRecipes';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import DoneCards from '../components/DoneCards';
 
 function DoneRecipes() {
   // const doneRecipes = localStorage.getItem('doneRecipes');
-  console.log(doneRecipes);
-  const [doneRecipesState] = useState(doneRecipes);
+  // const [doneRecipesState, setDoneRecipesState] = ([]);
+  const [filtered, setFiltered] = useState([]);
+
+  const handleFilter = ({ target }) => {
+    const chooseFilter = target.name;
+
+    if (chooseFilter === 'all') {
+      setFiltered(doneRecipes);
+    }
+    if (chooseFilter === 'drinks') {
+      setFiltered(doneRecipes.filter((recipe) => (
+        recipe.type === 'drink'
+      )));
+    }
+    if (chooseFilter === 'meals') {
+      setFiltered(doneRecipes.filter((recipe) => (
+        recipe.type === 'meal'
+      )));
+    }
+  };
+
+  useEffect(() => {
+    setFiltered(doneRecipes);
+  }, []);
+
+  // const [filtered, setFiltered] = useState([]);
 
   return (
     <>
@@ -17,7 +42,7 @@ function DoneRecipes() {
             name="all"
             type="button"
             data-testid="filter-by-all-btn"
-            // onClick={ () => console.log('Clicou') }
+            onClick={ handleFilter }
           >
             All
           </button>
@@ -25,7 +50,7 @@ function DoneRecipes() {
             name="meals"
             type="button"
             data-testid="filter-by-meal-btn"
-            // onClick={ () => console.log('Clicou') }
+            onClick={ handleFilter }
           >
             Meals
           </button>
@@ -33,57 +58,26 @@ function DoneRecipes() {
             name="drinks"
             type="button"
             data-testid="filter-by-drink-btn"
-            // onClick={ () => console.log('Clicou') }
+            onClick={ handleFilter }
           >
             Drinks
           </button>
         </div>
         <section>
           {
-            doneRecipesState.map((recipe, index) => (
-              <div
-                key={ `${recipe.id} ` }
-              >
-                <img
-                  alt="img-recipes"
-                  data-testid={ `${index}-horizontal-image` }
-                  src={ recipe.image }
-                />
-                <h4
-                  data-testid={ `${index}-horizontal-top-text` }
-                >
-                  { `${recipe.category}` }
-                </h4>
-                <p
-                  data-testid={ `${index}-horizontal-name` }
-                >
-                  { `${recipe.name}` }
-                </p>
-                <span
-                  data-testid={ `${index}-horizontal-done-date` }
-                >
-                  { `${recipe.doneDate}` }
-                </span>
-                <button
-                  type="button"
-                  data-testid={ `${index}-horizontal-share-btn` }
-                >
-                  Share
-                </button>
-                <div>
-                  {
-                    recipe.tags.map((tagName) => (
-                      <p
-                        key={ `${tagName}` }
-                        data-testid={ `${index}-${tagName}-horizontal-tag` }
-                      >
-                        { `${tagName}` }
-                      </p>
-                    ))
-                  }
-                </div>
-              </div>
-            ))
+            filtered.map((recipe, index) => (<DoneCards
+              key={ index }
+              image={ recipe.image }
+              name={ recipe.name }
+              nationality={ recipe.nationality }
+              category={ recipe.category }
+              type={ recipe.type }
+              alcohol={ recipe.alcoholicOrNot }
+              index={ index }
+              doneDate={ recipe.doneDate }
+              tags={ recipe.tags }
+              id={ recipe.id }
+            />))
           }
         </section>
         <Footer />

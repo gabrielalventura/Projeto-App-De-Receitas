@@ -2,7 +2,7 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
-import renderWithRouter from '../helpers/renderWithRouter';
+import renderWithRouter from './helpers/renderWithRouter';
 import mockFood from './helpers/mockDataFoods';
 import mockDrinks from './helpers/mockDataDrinks';
 import mockDataCategorysDrinks from './helpers/mockCategorysDrinks';
