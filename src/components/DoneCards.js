@@ -97,7 +97,7 @@ function DoneCards(props) {
       />
       <div>
         {
-          wasShared && <p>Link copied!</p>
+          wasShared && <p data-testid="text-share">Link copied!</p>
         }
       </div>
     </div>

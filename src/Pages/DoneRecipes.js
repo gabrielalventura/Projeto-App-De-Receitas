@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import doneRecipes from '../tests/helpers/mockDoneRecipes';
+// import doneRecipes from '../tests/helpers/mockDoneRecipes';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import DoneCards from '../components/DoneCards';
 
 function DoneRecipes() {
-  // const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
+  const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
   // const [doneRecipesState, setDoneRecipesState] = ([]);
   const [filtered, setFiltered] = useState([]);
 
