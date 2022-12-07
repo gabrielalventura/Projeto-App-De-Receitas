@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 import AppContext from '../context/AppContext';
+import SearchBar from './SearchBar';
 
 function Header({ title }) {
   const { isSrchActive, srchToggle } = useContext(AppContext);
@@ -32,7 +33,7 @@ function Header({ title }) {
           </button>
         )
       }
-      { isSrchActive && <input type="text" data-testid="search-input" />}
+      { isSrchActive && <SearchBar />}
       <h2 data-testid="page-title">{ title }</h2>
     </nav>
   );
