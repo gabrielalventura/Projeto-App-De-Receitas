@@ -1,10 +1,11 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import AppContext from './AppContext';
 import useFetch from '../hooks/useFetch';
 
 function AppProvider({ children }) {
   const [user, setUser] = useState({});
+  const [isActive, setIsActive] = useState(false);
   const [recipes, setRecipes] = useState([]);
   const [recipesInProgress, setRecipesInProgress] = useState({});
   const fetchDrinks = useFetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
@@ -18,9 +19,15 @@ function AppProvider({ children }) {
     drinks: [],
   });
 
+  const srchToggle = useCallback(() => {
+    setIsActive(isActive === false);
+  }, [isActive]);
+
   const values = useMemo(() => ({
     user,
     setUser,
+    isSrchActive: isActive,
+    srchToggle,
     fetchDrinks,
     fetchDrinksCategory,
     fetchMeals,
@@ -37,6 +44,8 @@ function AppProvider({ children }) {
     setRecipesInProgress,
   }), [
     user,
+    isActive,
+    srchToggle,
     fetchDrinks,
     fetchDrinksCategory,
     fetchMeals,
