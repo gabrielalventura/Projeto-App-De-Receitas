@@ -62,21 +62,20 @@ function DoneRecipes() {
           </button>
         </div>
         <section>
-          {
-            filtered.map((recipe, index) => (<DoneCards
-              key={ index }
-              image={ recipe.image }
-              name={ recipe.name }
-              nationality={ recipe.nationality }
-              category={ recipe.category }
-              type={ recipe.type }
-              alcohol={ recipe.alcoholicOrNot }
-              index={ index }
-              doneDate={ recipe.doneDate }
-              tags={ recipe.tags }
-              id={ recipe.id }
-            />))
-          }
+          { filtered !== null
+          && filtered.map((recipe, index) => (<DoneCards
+            key={ index }
+            image={ recipe.image }
+            name={ recipe.name }
+            nationality={ recipe.nationality }
+            category={ recipe.category }
+            type={ recipe.type }
+            alcohol={ recipe.alcoholicOrNot }
+            index={ index }
+            doneDate={ recipe.doneDate }
+            tags={ recipe.tags }
+            id={ recipe.id }
+          />))}
         </section>
         <Footer />
       </div>
