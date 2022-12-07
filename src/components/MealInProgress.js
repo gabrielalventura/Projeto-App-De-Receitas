@@ -37,13 +37,17 @@ function MealInProgress(props) {
 
   const finishRecipe = () => {
     const dateNow = new Date();
+    let newTags = [];
+    if (strTags !== null) {
+      newTags = strTags.split(',');
+    }
     const newRecipe = {
       id: idMeal,
       nationality: strArea,
       name: strMeal,
       category: strCategory,
       image: strMealThumb,
-      tags: strTags.split(','),
+      tags: newTags,
       alcoholicOrNot: '',
       type: 'meal',
       doneDate: dateNow.toISOString(),

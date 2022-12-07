@@ -108,14 +108,15 @@ function RecipesDetails({ history }) {
         type="button"
         data-testid="start-recipe-btn"
         style={ { position: 'fixed', bottom: '0' } }
-        onClick={ () => {
+        onClick={ async () => {
           if (history.location.pathname.includes('meal')) {
+            await dataContext.setRecipesInProgress([selectedCategory]);
             history.push(`/meals/${selectedCategory.id}/in-progress`);
-            dataContext.setRecipesInProgress([selectedCategory]);
+            console.log(selectedCategory);
           } else {
+            await dataContext.setRecipesInProgress([selectedCategory]);
             history.push(`/drinks/${selectedCategory.id}/in-progress`);
             console.log(selectedCategory);
-            dataContext.setRecipesInProgress([selectedCategory]);
           }
         } }
       >

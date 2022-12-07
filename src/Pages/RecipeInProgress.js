@@ -1,65 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import mockMeals from '../helpers/mockMealInProgress';
-import mockDrink from '../helpers/mockDrinkInProgress';
 import MealInProgress from '../components/MealInProgress';
 import DrinkInProgress from '../components/DrinkInProgress';
 import '../styles/RecipeInProgress.css';
 
 function RecipeInProgress() {
-  const [id, setId] = useState('');
   const [type, setType] = useState('');
   const [recipe, setRecipe] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [ingredients, setIngredients] = useState([]);
-
-  // esse trecho deverá ser refatorado para receber a receita da página de detalhes
-  let recipes = [];
-  if (type === 'meals') {
-    recipes = mockMeals;
-  }
-  if (type === 'drinks') {
-    recipes = mockDrink;
-  }
-  console.log(type);
-  // deverá ser obtido após clicar no start recipe da página de detalhes
-  // const { recipes } = useContext(AppContext);
   const history = useHistory();
 
-  const getRecipeInfo = () => {
-    if (type === 'meals') {
-      const newRecipe = recipes.filter((re) => (
-        re.idMeal === id
-      ));
-      setRecipe(newRecipe);
-      // setTimeout(() => {
-      //   setLoading(false);
-      // }, '0');
+  const fetchRecipe = async (recipeId, recipeType) => {
+    let recipes = [];
+    if (recipeType === 'drinks') {
+      const url = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${recipeId}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      const { drinks } = data;
+      recipes = drinks;
+      setRecipe(recipes);
       setLoading(false);
     }
-    if (type === 'drinks') {
-      const newRecipe = recipes.filter((re) => (
-        re.idDrink === id
-      ));
-      setRecipe(newRecipe);
-      // setTimeout(() => {
-      //   setLoading(false);
-      // }, '0');
+    if (recipeType === 'meals') {
+      const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${recipeId}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      const { meals } = data;
+      recipes = meals;
+      setRecipe(recipes);
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    getRecipeInfo();
-  }, [id]);
-
-  useEffect(() => {
     const { pathname } = history.location;
     const recipeId = pathname.split('/')[2];
     const recipeType = pathname.split('/')[1];
-    setId(recipeId);
     setType(recipeType);
-    // getRecipeInfo();
+    fetchRecipe(recipeId, recipeType);
   }, []);
 
   const getIngredientsList = () => {
