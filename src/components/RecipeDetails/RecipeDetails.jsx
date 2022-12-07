@@ -33,30 +33,29 @@ function RecipesDetails({ history }) {
           alcoholic: json.drinks[0].strAlcoholic,
           simpleCategory: json.drinks[0].strCategory,
         };
-        setSelectedCategory(objectFinnaly);
-      } else if (history.location.pathname.includes('meal')) {
-        const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${urlInclude}`);
-        const json = await response.json();
-
-        const filterIngredients = Object.keys(json.meals[0])
-          .filter((meal) => meal.includes('strIngredient')) || [];
-
-        const filterMeasures = Object.keys(json.meals[0])
-          .filter((meal) => meal.includes('strMeasure')) || [];
-        const objectFinnaly = {
-          meals: true,
-          linkYtb: json.meals[0].strYoutube,
-          title: json.meals[0].strMeal,
-          thumb: json.meals[0].strMealThumb,
-          category: json.meals[0].strCategory,
-          instructions: json.meals[0].strInstructions,
-          ingredients: filterIngredients.map((ingredient) => json.meals[0][ingredient]),
-          measures: filterMeasures.map((measure) => json.meals[0][measure]),
-          drinkOrFood: dataContext.fetchMeals,
-          id: json.meals[0].idMeal,
-        };
-        setSelectedCategory(objectFinnaly);
+        return setSelectedCategory(objectFinnaly);
       }
+      const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${urlInclude}`);
+      const json = await response.json();
+
+      const filterIngredients = Object.keys(json.meals[0])
+        .filter((meal) => meal.includes('strIngredient')) || [];
+
+      const filterMeasures = Object.keys(json.meals[0])
+        .filter((meal) => meal.includes('strMeasure')) || [];
+      const objectFinnaly = {
+        meals: true,
+        linkYtb: json.meals[0].strYoutube,
+        title: json.meals[0].strMeal,
+        thumb: json.meals[0].strMealThumb,
+        category: json.meals[0].strCategory,
+        instructions: json.meals[0].strInstructions,
+        ingredients: filterIngredients.map((ingredient) => json.meals[0][ingredient]),
+        measures: filterMeasures.map((measure) => json.meals[0][measure]),
+        drinkOrFood: dataContext.fetchMeals,
+        id: json.meals[0].idMeal,
+      };
+      return setSelectedCategory(objectFinnaly);
     }
     fetchDrinksOrFoods();
   }, [
