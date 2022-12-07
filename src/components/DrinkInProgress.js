@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import CheckBoxIngredients from './CheckBoxIngredients';
 import AppContext from '../context/AppContext';
 import Share from './Share';
+import FavoriteButton from '../Pages/FavoriteButton';
 
 function DrinkInProgress(props) {
   const { recipe, ingredients } = props;
@@ -84,7 +85,11 @@ function DrinkInProgress(props) {
         id={ recipe[0].idDrink }
         testid="share-btn"
       />
-      <button type="button" data-testid="favorite-btn">Favorite</button>
+      <FavoriteButton
+        testid="favorite-btn"
+        recipe={ recipe[0] }
+        type="drink"
+      />
       <div>
         { wasShared && <p>Link copied!</p>}
       </div>
