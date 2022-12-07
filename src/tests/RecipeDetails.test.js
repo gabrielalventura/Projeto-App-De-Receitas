@@ -1,8 +1,7 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
-import { createMemoryHistory } from 'history';
 import AppProvider from '../context/AppProvider';
 import mockFood from './helpers/mockDataFoods';
 import mockDrinks from './helpers/mockDataDrinks';
