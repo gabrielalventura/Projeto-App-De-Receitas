@@ -1,0 +1,13 @@
+.ingredients-label-true {
+  text-decoration: line-through solid black;
+}
+
+.ingredients-label-false {
+  text-decoration: none;
+}
+
+.card-image {
+  max-width: 20%;
+  padding: 5px;
+  width: 20%;
+}
