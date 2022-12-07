@@ -31,8 +31,6 @@ function DoneRecipes() {
     setFiltered(doneRecipes);
   }, []);
 
-  // const [filtered, setFiltered] = useState([]);
-
   return (
     <>
       <Header title="Done Recipes" />

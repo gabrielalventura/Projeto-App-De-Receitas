@@ -22,7 +22,7 @@ function FavoriteRecipes() {
     image: 'https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg',
   },
   {
-    id: 456,
+    id: '178319',
     type: 'drink',
     nationality: '',
     category: '',
