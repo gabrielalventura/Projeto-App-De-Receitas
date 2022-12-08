@@ -6,26 +6,6 @@ import Cards from '../components/Cards';
 import AppContext from '../context/AppContext';
 
 function FavoriteRecipes() {
-  // const teste = [{ // usada para testar a renderização dos cards
-  //   id: '52771',
-  //   type: 'meal',
-  //   nationality: 'Italian',
-  //   category: 'Vegetarian',
-  //   alcoholicOrNot: '',
-  //   name: 'Spicy Arrabiata Penne',
-  //   image: 'https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg',
-  // },
-  // {
-  //   id: '178319',
-  //   type: 'drink',
-  //   nationality: '',
-  //   category: '',
-  //   alcoholicOrNot: 'Alcoholic',
-  //   name: 'Aquamarine',
-  //   image: 'https://www.thecocktaildb.com/images/media/drink/zvsre31572902738.jpg',
-  // },
-  // ];
-
   const { faveRecipes, setFaveRecipes } = useContext(AppContext);
   const retrieveFaveRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
   console.log(retrieveFaveRecipes);

@@ -1,0 +1,11 @@
+.containerRecomended {
+  display: flex;
+  overflow: auto;
+  width: 350px;
+}
+
+.imgRecomended {
+  height: 150px;
+  padding-bottom: 15px;
+  width: 180px;
+}

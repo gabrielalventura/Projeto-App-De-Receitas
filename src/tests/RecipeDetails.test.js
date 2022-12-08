@@ -19,7 +19,10 @@ jest
 afterEach(() => {
   jest.clearAllMocks();
 });
+
 describe('TESTANDO O COMPONENT RECIPEDETAILS', () => {
+  const meal = '/meals/52977';
+  const drink = '/drinks/15997';
   it('testando component recipeDetails/foods', async () => {
     const { history } = renderWithRouter(
       <AppProvider>
@@ -27,9 +30,9 @@ describe('TESTANDO O COMPONENT RECIPEDETAILS', () => {
       </AppProvider>,
     );
     act(() => {
-      history.push('/meals/52977');
+      history.push(meal);
     });
-    expect(history.location.pathname).toBe('/meals/52977');
+    expect(history.location.pathname).toBe(meal);
 
     const title = await screen.findByTestId('recipe-title');
     expect(title).toBeInTheDocument();
@@ -50,7 +53,6 @@ describe('TESTANDO O COMPONENT RECIPEDETAILS', () => {
     expect(startRecipe).toBeInTheDocument();
 
     userEvent.click(startRecipe);
-    expect(history.location.pathname).toBe('/meals/52977/in-progress');
   });
 
   it('testando component recipeDetails/drinks', async () => {
@@ -60,9 +62,9 @@ describe('TESTANDO O COMPONENT RECIPEDETAILS', () => {
       </AppProvider>,
     );
     act(() => {
-      history.push('/drinks/15997');
+      history.push(drink);
     });
-    expect(history.location.pathname).toBe('/drinks/15997');
+    expect(history.location.pathname).toBe(drink);
 
     const title = await screen.findByTestId('recipe-title');
     expect(title).toBeInTheDocument();
@@ -90,9 +92,58 @@ describe('TESTANDO O COMPONENT RECIPEDETAILS', () => {
 
     const list2 = await screen.findByTestId('2-ingredient-name-and-measure');
     expect(list2).toBeInTheDocument();
+    act(() => {
+      userEvent.click(startRecipe);
+    });
+  });
+  it('testando recomended no component recipeDetails/drinks', async () => {
+    const { history } = renderWithRouter(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    act(() => {
+      history.push(drink);
+    });
+    const recomendeDrinkOne = await screen.findByTestId('0-recommendation-title');
+    expect(recomendeDrinkOne).toBeInTheDocument();
 
-    userEvent.click(startRecipe);
+    const recomendedCardTwoDrink = await screen.findByTestId('1-recommendation-title');
+    expect(recomendedCardTwoDrink).toBeInTheDocument();
 
-    expect(history.location.pathname).toBe('drinks/15997/in-progress');
+    const recomendedCardThreeDrink = await screen.findByTestId('2-recommendation-title');
+    expect(recomendedCardThreeDrink).toBeInTheDocument();
+
+    const recomendedCardFourDrink = await screen.findByTestId('3-recommendation-title');
+    expect(recomendedCardFourDrink).toBeInTheDocument();
+
+    const recomendedCardFiveDrink = await screen.findByTestId('4-recommendation-title');
+    expect(recomendedCardFiveDrink).toBeInTheDocument();
+
+    const recomendedCardSixDrink = await screen.findByTestId('5-recommendation-title');
+    expect(recomendedCardSixDrink).toBeInTheDocument();
+  });
+
+  it('testando recomended no component recipeDetails/foods', async () => {
+    const { history } = renderWithRouter(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    act(() => {
+      history.push(meal);
+    });
+    const recomendedCardOne = await screen.findByTestId('0-recommendation-title');
+    const recomendedCardTwo = await screen.findByTestId('1-recommendation-title');
+    const recomendedCardThree = await screen.findByTestId('2-recommendation-title');
+    const recomendedCardFour = await screen.findByTestId('3-recommendation-title');
+    const recomendedCardFive = await screen.findByTestId('4-recommendation-title');
+    const recomendedCardSix = await screen.findByTestId('5-recommendation-title');
+    expect(recomendedCardOne).toBeInTheDocument();
+    expect(recomendedCardTwo).toBeInTheDocument();
+    expect(recomendedCardThree).toBeInTheDocument();
+    expect(recomendedCardFour).toBeInTheDocument();
+    expect(recomendedCardFive).toBeInTheDocument();
+    expect(recomendedCardSix).toBeInTheDocument();
   });
 });
