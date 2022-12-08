@@ -25,7 +25,7 @@ function FavoriteButton(props) {
       setIcon(whiteHeart);
     }
   };
-
+  console.log(recipe);
   const getData = () => {
     if (type === 'meal') {
       setData({

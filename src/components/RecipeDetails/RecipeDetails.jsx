@@ -3,12 +3,15 @@ import PropTypes from 'prop-types';
 import AppContext from '../../context/AppContext';
 import { converStrToId } from './HelperRecipesDetails';
 import '../../styles/RecomendedRecipes.css';
+import Share from '../Share';
+import FavoriteButton from '../../Pages/FavoriteButton';
 
 function RecipesDetails({ history }) {
   const [selectedCategory, setSelectedCategory] = useState({});
   const [recomended, setRecomended] = useState([]);
   const urlInclude = converStrToId(history.location.pathname);
   const dataContext = useContext(AppContext);
+
   useEffect(() => {
     const drinksOrMeals = async () => {
       const six = 6;
@@ -16,6 +19,7 @@ function RecipesDetails({ history }) {
         if (history.location.pathname.includes('drink')) {
           const responseMeals = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
           const jsonMeals = await responseMeals.json();
+          console.log(jsonMeals);
           const sJsonMeals = jsonMeals.meals.slice(0, six);
           return setRecomended(sJsonMeals);
         }
@@ -43,8 +47,8 @@ function RecipesDetails({ history }) {
           .filter((drink) => drink.includes('strMeasure')) || [];
         const categoryAlcoholic = `${jsonDrink.drinks[0].strAlcoholic}
         ${jsonDrink.drinks[0].strCategory}`;
-
         const objectFinnaly = {
+          json: jsonDrink,
           drinks: true,
           title: jsonDrink.drinks[0].strDrink,
           thumb: jsonDrink.drinks[0].strDrinkThumb,
@@ -68,6 +72,7 @@ function RecipesDetails({ history }) {
       const filterMeasures = Object.keys(json.meals[0])
         .filter((meal) => meal.includes('strMeasure')) || [];
       const objectFinnaly = {
+        json,
         meals: true,
         linkYtb: json.meals[0].strYoutube,
         title: json.meals[0].strMeal,
@@ -142,6 +147,37 @@ function RecipesDetails({ history }) {
       >
         Start Recipe
       </button>
+      {history.location.pathname.includes('drink')
+        && selectedCategory.json !== undefined ? (
+          <>
+            <Share
+              type="drink"
+              id={ selectedCategory.id }
+              testid="share-btn"
+            />
+            {/* <FavoriteButton
+              type="drink"
+              recipe={ selectedCategory.jsonDrink.drinks[0] }
+              testid="favorite-btn"
+            /> */}
+          </>
+        ) : (
+          <>
+            <Share
+              type="meal"
+              id={ selectedCategory.id }
+              testid="share-btn"
+            />
+            {/* <FavoriteButton
+              type="meal"
+              recipe={ selectedCategory.json.meals[0] }
+              testid="favorite-btn"
+            /> */}
+          </>
+        )}
+      <div>
+        { dataContext.wasShared && <p>Link copied!</p>}
+      </div>
       <div className="containerRecomended">
         {
           history.location.pathname.includes('meal')
