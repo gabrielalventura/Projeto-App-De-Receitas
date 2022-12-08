@@ -50,7 +50,6 @@ describe('TESTANDO O COMPONENT RECIPEDETAILS', () => {
     expect(startRecipe).toBeInTheDocument();
 
     userEvent.click(startRecipe);
-    expect(history.location.pathname).toBe('/meals/52977/in-progress');
   });
 
   it('testando component recipeDetails/drinks', async () => {
@@ -90,9 +89,63 @@ describe('TESTANDO O COMPONENT RECIPEDETAILS', () => {
 
     const list2 = await screen.findByTestId('2-ingredient-name-and-measure');
     expect(list2).toBeInTheDocument();
+    act(() => {
+      userEvent.click(startRecipe);
+    });
+  });
+  it('testando recomended no component recipeDetails/drinks', async () => {
+    const { history } = renderWithRouter(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    act(() => {
+      history.push('/drinks/15997');
+    });
+    const recomendedCardOne = await screen.findByTestId('0-recommendation-title');
+    expect(recomendedCardOne).toBeInTheDocument();
 
-    userEvent.click(startRecipe);
+    const recomendedCardTwo = await screen.findByTestId('1-recommendation-title');
+    expect(recomendedCardTwo).toBeInTheDocument();
 
-    expect(history.location.pathname).toBe('drinks/15997/in-progress');
+    const recomendedCardThree = await screen.findByTestId('2-recommendation-title');
+    expect(recomendedCardThree).toBeInTheDocument();
+
+    const recomendedCardFour = await screen.findByTestId('3-recommendation-title');
+    expect(recomendedCardFour).toBeInTheDocument();
+
+    const recomendedCardFive = await screen.findByTestId('4-recommendation-title');
+    expect(recomendedCardFive).toBeInTheDocument();
+
+    const recomendedCardSix = await screen.findByTestId('5-recommendation-title');
+    expect(recomendedCardSix).toBeInTheDocument();
+  });
+
+  it('testando recomended no component recipeDetails/foods', async () => {
+    const { history } = renderWithRouter(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    act(() => {
+      history.push('/meals/52977');
+    });
+    const recomendedCardOne = await screen.findByTestId('0-recommendation-title');
+    expect(recomendedCardOne).toBeInTheDocument();
+
+    const recomendedCardTwo = await screen.findByTestId('1-recommendation-title');
+    expect(recomendedCardTwo).toBeInTheDocument();
+
+    const recomendedCardThree = await screen.findByTestId('2-recommendation-title');
+    expect(recomendedCardThree).toBeInTheDocument();
+
+    const recomendedCardFour = await screen.findByTestId('3-recommendation-title');
+    expect(recomendedCardFour).toBeInTheDocument();
+
+    const recomendedCardFive = await screen.findByTestId('4-recommendation-title');
+    expect(recomendedCardFive).toBeInTheDocument();
+
+    const recomendedCardSix = await screen.findByTestId('5-recommendation-title');
+    expect(recomendedCardSix).toBeInTheDocument();
   });
 });
