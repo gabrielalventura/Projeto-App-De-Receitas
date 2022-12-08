@@ -3,8 +3,14 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from './helpers/renderWithRouter';
 import FavoriteRecipes from '../Pages/FavoriteRecipes';
-// import Cards from '../components/Cards';
 import AppProvider from '../context/AppProvider';
+import faveRecipes from './helpers/mockFaveRecipes';
+
+const faveRecipesMock = faveRecipes;
+
+beforeEach(() => {
+  window.localStorage.setItem('favoriteRecipes', JSON.stringify(faveRecipesMock));
+});
 
 describe('Testa a página Favorite Recipes', () => {
   test('se renderiza os três botões de filtro', () => {
@@ -23,16 +29,6 @@ describe('Testa a página Favorite Recipes', () => {
     const filterDrinkBtn = screen.getByTestId('filter-by-drink-btn');
     expect(filterDrinkBtn).toBeInTheDocument();
   });
-
-  // test('se ao clicar no botão de compartilhar, aparece na tela a mensagem Link copied!', () => {
-  //   renderWithRouter(<FavoriteRecipes />);
-
-  //   const shareBtn = screen.getAllByText('Share');
-  //   expect(shareBtn[0]).toBeInTheDocument();
-
-  //   userEvent.click(shareBtn[0]);
-  //   expect('Link copied!').toBeInTheDocument();
-  // });
 
   test('se ao clicar no botão de filtrar Meals, apenas comidas são renderizadas na tela', () => {
     renderWithRouter(
