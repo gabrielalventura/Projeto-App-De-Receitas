@@ -6,52 +6,6 @@ import Cards from '../components/Cards';
 import AppContext from '../context/AppContext';
 
 function FavoriteRecipes() {
-  const teste = [{ // usada para testar a renderização dos cards
-    id: '52771',
-    type: 'meal',
-    nationality: 'Italian',
-    category: 'Vegetarian',
-    alcoholicOrNot: '',
-    name: 'Spicy Arrabiata Penne',
-    image: 'https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg',
-  },
-  {
-    id: '178319',
-    type: 'drink',
-    nationality: '',
-    category: '',
-    alcoholicOrNot: 'Alcoholic',
-    name: 'Aquamarine',
-    image: 'https://www.thecocktaildb.com/images/media/drink/zvsre31572902738.jpg',
-  },
-  ];
-
-  localStorage.setItem('favoriteRecipes', JSON.stringify(teste));
-
-  // const [filtered, setFiltered] = useState([
-
-  // const handleFilter = ({ target }) => {
-  //   const chooseFilter = target.name;
-
-  //   if (chooseFilter === 'all') {
-  //     setFiltered(faveRecipes);
-  //   }
-  //   if (chooseFilter === 'drinks') {
-  //     setFiltered(faveRecipes.filter((recipe) => (
-  //       recipe.type === 'drink'
-  //     )));
-  //   }
-  //   if (chooseFilter === 'meals') {
-  //     setFiltered(faveRecipes.filter((recipe) => (
-  //       recipe.type === 'meal'
-  //     )));
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   setFiltered(faveRecipes);
-  // }, []);
-
   const { faveRecipes, setFaveRecipes } = useContext(AppContext);
   const retrieveFaveRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
   console.log(retrieveFaveRecipes);
