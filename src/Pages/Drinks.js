@@ -8,6 +8,8 @@ function Drinks() {
   const {
     fetchDrinksCategory: { data: { drinks: categorysDrinks } },
     fetchDrinks: { data },
+    filteredRecipes,
+    setCurrentPage,
   } = useContext(AppContext) || [];
   const [selectedFilterCategory, setSelectedFilterCategory] = useState([]);
   const [dataDrinks, setDataDrinks] = useState([]);
@@ -15,10 +17,15 @@ function Drinks() {
   useEffect(() => {
     if (selectedFilterCategory.length > 0) {
       setDataDrinks(filteredByCategory.data);
+    } else if (filteredRecipes.drinks.length > 0) {
+      setDataDrinks(filteredRecipes);
     } else {
       setDataDrinks(data);
     }
-  }, [data, selectedFilterCategory, filteredByCategory]);
+  }, [data, selectedFilterCategory, filteredByCategory, filteredRecipes]);
+  useEffect(() => {
+    setCurrentPage('drinks');
+  });
 
   return (
     <div>
