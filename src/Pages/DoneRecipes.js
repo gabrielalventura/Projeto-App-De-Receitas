@@ -5,9 +5,9 @@ import Footer from '../components/Footer';
 import DoneCards from '../components/DoneCards';
 
 function DoneRecipes() {
-  const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
+  const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes')) || [];
   // const [doneRecipesState, setDoneRecipesState] = ([]);
-  const [filtered, setFiltered] = useState([]);
+  const [filtered, setFiltered] = useState([doneRecipes]);
 
   const handleFilter = ({ target }) => {
     const chooseFilter = target.name;
@@ -28,6 +28,7 @@ function DoneRecipes() {
   };
 
   useEffect(() => {
+    // const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes')) || [];
     setFiltered(doneRecipes);
   }, []);
 
