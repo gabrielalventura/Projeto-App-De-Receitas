@@ -14,17 +14,16 @@ function RecipesDetails({ history }) {
       const six = 6;
       try {
         if (history.location.pathname.includes('drink')) {
-          const response = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
-          const json = await response.json();
-          const sJson = json.meals.slice(0, six);
-          return setRecomended(sJson);
+          const responseMeals = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+          const jsonMeals = await responseMeals.json();
+          const sJsonMeals = jsonMeals.meals.slice(0, six);
+          return setRecomended(sJsonMeals);
         }
         if (history.location.pathname.includes('meal')) {
-          const response = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
-          const json = await response.json();
-          const sJson = json.drinks.slice(0, six);
-          // console.log();
-          return setRecomended(sJson);
+          const respondeDrinks = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
+          const jsonDrinks = await respondeDrinks.json();
+          const sJsonDrinks = jsonDrinks.drinks.slice(0, six);
+          return setRecomended(sJsonDrinks);
         }
       } catch (error) {
         console.log(error);
@@ -36,26 +35,27 @@ function RecipesDetails({ history }) {
   useEffect(() => {
     async function fetchDrinksOrFoods() {
       if (history.location.pathname.includes('drink')) {
-        const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${urlInclude}`);
-        const json = await response.json();
-        const filterIngredients = Object.keys(json.drinks[0])
+        const responseDrink = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${urlInclude}`);
+        const jsonDrink = await responseDrink.json();
+        const filterIngredients = Object.keys(jsonDrink.drinks[0])
           .filter((drink) => drink.includes('strIngredient')) || [];
-        const filterMeasures = Object.keys(json.drinks[0])
+        const filterMeasures = Object.keys(jsonDrink.drinks[0])
           .filter((drink) => drink.includes('strMeasure')) || [];
-        const categoryAlcoholic = `${json.drinks[0].strAlcoholic}
-        ${json.drinks[0].strCategory}`;
+        const categoryAlcoholic = `${jsonDrink.drinks[0].strAlcoholic}
+        ${jsonDrink.drinks[0].strCategory}`;
 
         const objectFinnaly = {
           drinks: true,
-          title: json.drinks[0].strDrink,
-          thumb: json.drinks[0].strDrinkThumb,
+          title: jsonDrink.drinks[0].strDrink,
+          thumb: jsonDrink.drinks[0].strDrinkThumb,
           category: categoryAlcoholic,
-          instructions: json.drinks[0].strInstructions,
-          ingredients: filterIngredients.map((ingredient) => json.drinks[0][ingredient]),
-          measures: filterMeasures.map((measure) => json.drinks[0][measure]),
-          id: json.drinks[0].idDrink,
-          alcoholic: json.drinks[0].strAlcoholic,
-          simpleCategory: json.drinks[0].strCategory,
+          instructions: jsonDrink.drinks[0].strInstructions,
+          ingredients: filterIngredients
+            .map((ingredient) => jsonDrink.drinks[0][ingredient]),
+          measures: filterMeasures.map((measure) => jsonDrink.drinks[0][measure]),
+          id: jsonDrink.drinks[0].idDrink,
+          alcoholic: jsonDrink.drinks[0].strAlcoholic,
+          simpleCategory: jsonDrink.drinks[0].strCategory,
         };
         return setSelectedCategory(objectFinnaly);
       }
