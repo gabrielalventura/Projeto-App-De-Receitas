@@ -6,7 +6,7 @@ import Cards from '../components/Cards';
 function FavoriteRecipes() {
   // const { faveRecipes, setFaveRecipes} = useContext(AppProvider)
 
-  // const retrieveFaveRecipes = localStorage.getItem('favoriteRecipes');
+  // const retrieveFaveRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
 
   // useEffect(() => {
   //   setFaveRecipes(retrieveFaveRecipes);
