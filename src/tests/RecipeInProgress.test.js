@@ -12,14 +12,32 @@ import { mockFavoriteMeal, mockFavoriteDrink } from './helpers/mockFavoriteRecip
 const iconContainer = 'icon-container';
 const whiteHeart = 'whiteHeartIcon.svg';
 const mealsEndPoint = '/meals/52771/in-progress';
-const SAVED_INGREDITES = [
+const drinksEndPoint = '/drinks/178319/in-progress';
+const ingredient1Meals = '1 pound penne rigate';
+const ingredient1drinks = '2 oz Hpnotiq';
+const frinstLabel = '0-ingredient-step';
+const checkBoxTestId = 'ingredient-checkbox';
+const classLabelFalse = 'ingredients-label-false';
+const classLabelTrue = 'ingredients-label-true';
+const SAVED_MEALS = [
   {
     id: '52771',
-    ingredient: '1 pound penne rigate',
+    ingredient: ingredient1Meals,
   },
   {
     id: '52771',
     ingredient: '1/4 cup olive oil',
+  },
+];
+
+const SAVED_DRINKS = [
+  {
+    id: '178319',
+    ingredient: ingredient1drinks,
+  },
+  {
+    id: '178319',
+    ingredient: '1 oz Pineapple Juice',
   },
 ];
 
@@ -60,7 +78,7 @@ describe('Realiza testes na página de receitas em progresso quando acessa uma c
     const favoriteIcon = screen.getByAltText('favorite');
     const recipeCategory = screen.getByTestId('recipe-category');
     const ingredientsCheck = await screen.findAllByRole('checkbox');
-    const ingredientsLabel = screen.getByTestId('0-ingredient-step');
+    const ingredientsLabel = screen.getByTestId(frinstLabel);
     const recipeInstructions = screen.getByTestId('instructions');
     const finishBtn = screen.getByRole('button', { name: 'Finish' });
 
@@ -92,7 +110,7 @@ describe('Realiza testes na página de receitas em progresso quando acessa uma c
       </AppProvider>,
     );
     act(() => {
-      history.push('/drinks/178319/in-progress');
+      history.push(drinksEndPoint);
     });
 
     expect(global.fetch).toBeCalledWith(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${178319}`);
@@ -111,7 +129,7 @@ describe('Realiza testes na página de receitas em progresso quando acessa uma c
     const favoriteIcon = screen.getByAltText('favorite');
     const recipeCategory = screen.getByTestId('recipe-category');
     const ingredientsCheck = await screen.findAllByRole('checkbox');
-    const ingredientsLabel = screen.getByTestId('0-ingredient-step');
+    const ingredientsLabel = screen.getByTestId(frinstLabel);
     const recipeInstructions = screen.getByTestId('instructions');
     const finishBtn = screen.getByRole('button', { name: 'Finish' });
 
@@ -214,7 +232,7 @@ describe('Testando a funcionalidade do botão favoritar', () => {
 });
 
 describe('Testando o checkbox de ingredientes', () => {
-  it('1- Verifica se ao carregar o checkbox não está checkado e após clicar muda seu status e o texto de sua label é riscado', async () => {
+  it('1- Verificar funcionamento do checkbox na página de comida em progresso', async () => {
     jest.spyOn(global, 'fetch');
     global.fetch.mockResolvedValue({
       json: jest.fn().mockResolvedValue(mockMealsTest),
@@ -230,7 +248,6 @@ describe('Testando o checkbox de ingredientes', () => {
     });
 
     const INITIAL_LOCALSTORAGE = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    // const EMPTY_INPROGRESS = { drinks: [], meals: [] };
     expect(INITIAL_LOCALSTORAGE).toBe(null);
 
     expect(global.fetch).toBeCalledWith(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${52771}`);
@@ -243,24 +260,152 @@ describe('Testando o checkbox de ingredientes', () => {
     const loadingIngredients = screen.getAllByText('loading');
     await waitForElementToBeRemoved(loadingIngredients[0]);
     expect(loadingIngredients[0]).not.toBeInTheDocument();
-    const checkboxes = screen.getAllByTestId('ingredient-checkbox');
+    const checkboxes = screen.getAllByTestId(checkBoxTestId);
     expect(checkboxes.length).toBe(8);
-    const ingredientLabel = screen.getByTestId('0-ingredient-step');
-    expect(ingredientLabel).toHaveTextContent('1 pound penne rigate');
-    expect(ingredientLabel).toHaveAttribute('class', 'ingredients-label-false');
+    const ingredientLabel = screen.getByTestId(frinstLabel);
+    expect(ingredientLabel).toHaveTextContent(ingredient1Meals);
+    expect(ingredientLabel).toHaveAttribute('class', classLabelFalse);
 
     userEvent.click(checkboxes[0]);
     userEvent.click(checkboxes[1]);
-    expect(ingredientLabel).toHaveAttribute('class', 'ingredients-label-true');
+    expect(ingredientLabel).toHaveAttribute('class', classLabelTrue);
     const AFTER_LOCALSTORAGE = JSON.parse(localStorage.getItem('inProgressRecipes'));
 
     expect(AFTER_LOCALSTORAGE.meals.length).toBe(2);
-    expect(AFTER_LOCALSTORAGE.meals[0]).toEqual(SAVED_INGREDITES[0]);
-    expect(AFTER_LOCALSTORAGE.meals[1]).toEqual(SAVED_INGREDITES[1]);
+    expect(AFTER_LOCALSTORAGE.meals[0]).toEqual(SAVED_MEALS[0]);
+    expect(AFTER_LOCALSTORAGE.meals[1]).toEqual(SAVED_MEALS[1]);
 
     userEvent.click(checkboxes[0]);
     const AFTER_LOCALSTORAGE2 = JSON.parse(localStorage.getItem('inProgressRecipes'));
     expect(AFTER_LOCALSTORAGE2.meals.length).toBe(1);
-    expect(AFTER_LOCALSTORAGE2.meals[0]).toEqual(SAVED_INGREDITES[1]);
+    expect(AFTER_LOCALSTORAGE2.meals[0]).toEqual(SAVED_MEALS[1]);
+    const result1 = AFTER_LOCALSTORAGE2.meals.includes(SAVED_MEALS[0]);
+    expect(result1).toBe(false);
+
+    jest.clearAllMocks();
+  });
+  it('2- Verificar funcionamento do checkbox na página de bebida em progresso', async () => {
+    // jest.restoreAllMocks();
+
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(mockDrinkTest),
+    });
+
+    const { history } = renderWithRouter(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    act(() => {
+      history.push(drinksEndPoint);
+    });
+
+    const INITIAL_LOCALSTORAGE = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    expect(INITIAL_LOCALSTORAGE).not.toBe(null);
+
+    expect(global.fetch).toBeCalledWith(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${178319}`);
+
+    const loading = screen.getByRole('heading', { name: /loading/i });
+    expect(loading).toBeInTheDocument();
+    await waitForElementToBeRemoved(loading);
+    expect(loading).not.toBeInTheDocument();
+
+    const checkboxes = await screen.findAllByTestId(checkBoxTestId);
+    expect(checkboxes.length).toBe(3);
+    const ingredientLabel = screen.getByTestId(frinstLabel);
+    expect(ingredientLabel).toHaveTextContent(ingredient1drinks);
+    expect(ingredientLabel).toHaveAttribute('class', classLabelFalse);
+
+    userEvent.click(checkboxes[0]);
+    userEvent.click(checkboxes[1]);
+    expect(ingredientLabel).toHaveAttribute('class', classLabelTrue);
+    const AFTER_LOCALSTORAGE = JSON.parse(localStorage.getItem('inProgressRecipes'));
+
+    expect(AFTER_LOCALSTORAGE.drinks.length).toBe(2);
+    expect(AFTER_LOCALSTORAGE.drinks[0]).toEqual(SAVED_DRINKS[0]);
+    expect(AFTER_LOCALSTORAGE.drinks[1]).toEqual(SAVED_DRINKS[1]);
+
+    userEvent.click(checkboxes[0]);
+    const AFTER_LOCALSTORAGE2 = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    expect(AFTER_LOCALSTORAGE2.drinks.length).toBe(1);
+    expect(AFTER_LOCALSTORAGE2.drinks[0]).toEqual(SAVED_DRINKS[1]);
+    const result1 = AFTER_LOCALSTORAGE2.drinks.includes(SAVED_MEALS[0]);
+    expect(result1).toBe(false);
+
+    jest.clearAllMocks();
+  });
+
+  it('3- Verifica se ao acessar novamente a página de comida, o ingrediente salvo ainda permanesse selecionado', async () => {
+    jest.restoreAllMocks();
+
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(mockMealsTest),
+    });
+
+    const { history } = renderWithRouter(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    act(() => {
+      history.push(mealsEndPoint);
+    });
+
+    const INITIAL_LOCALSTORAGE = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    expect(INITIAL_LOCALSTORAGE).not.toBe(null);
+    const storedMeals = INITIAL_LOCALSTORAGE.meals;
+    expect(storedMeals.length).toBe(1);
+
+    const loading = screen.getByRole('heading', { name: /loading/i });
+    expect(loading).toBeInTheDocument();
+    await waitForElementToBeRemoved(loading);
+    expect(loading).not.toBeInTheDocument();
+
+    const checkboxes = await screen.findAllByTestId(checkBoxTestId);
+    expect(checkboxes.length).toBe(8);
+    const ingredientLabel = screen.getByTestId(frinstLabel);
+    expect(ingredientLabel).toHaveTextContent(ingredient1Meals);
+    expect(ingredientLabel).toHaveAttribute('class', classLabelFalse);
+    const ingredientLabel2 = screen.getByTestId('1-ingredient-step');
+    expect(ingredientLabel2).toHaveTextContent('1/4 cup olive oil');
+    expect(ingredientLabel2).toHaveAttribute('class', classLabelTrue);
+  });
+  it('4- Verifica se ao acessar novamente a página de bebida, o ingrediente salvo ainda permanesse selecionado', async () => {
+    jest.restoreAllMocks();
+
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(mockDrinkTest),
+    });
+
+    const { history } = renderWithRouter(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    act(() => {
+      history.push(drinksEndPoint);
+    });
+
+    const INITIAL_LOCALSTORAGE = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    expect(INITIAL_LOCALSTORAGE).not.toBe(null);
+    const storedDrinks = INITIAL_LOCALSTORAGE.drinks;
+    expect(storedDrinks.length).toBe(1);
+
+    const loading = screen.getByRole('heading', { name: /loading/i });
+    expect(loading).toBeInTheDocument();
+    await waitForElementToBeRemoved(loading);
+    expect(loading).not.toBeInTheDocument();
+
+    const checkboxes = await screen.findAllByTestId(checkBoxTestId);
+    expect(checkboxes.length).toBe(3);
+    const ingredientLabel = screen.getByTestId(frinstLabel);
+    expect(ingredientLabel).toHaveTextContent(ingredient1drinks);
+    expect(ingredientLabel).toHaveAttribute('class', classLabelFalse);
+    const ingredientLabel2 = screen.getByTestId('1-ingredient-step');
+    expect(ingredientLabel2).toHaveTextContent('1 oz Pineapple Juice');
+    expect(ingredientLabel2).toHaveAttribute('class', classLabelTrue);
   });
 });
