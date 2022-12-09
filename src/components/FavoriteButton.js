@@ -17,7 +17,7 @@ function FavoriteButton(props) {
     let result = false;
     if (localStorage.getItem('favoriteRecipes') !== null) {
       const savedRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
-      result = savedRecipes.some((element) => element.idRecipe === data.idRecipe);
+      result = savedRecipes.some((element) => element.id === data.id);
     }
     if (result) {
       setIcon(blackHeart);
@@ -58,26 +58,22 @@ function FavoriteButton(props) {
   const handleClick = () => {
     let result = false;
     let savedRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
-    console.log(savedRecipes);
     if (savedRecipes === null) {
       localStorage.setItem('favoriteRecipes', JSON.stringify([data]));
       validateFavorite();
       savedRecipes = [data];
-      console.log(savedRecipes);
     } else {
-      result = savedRecipes.some((element) => element.idRecipe === data.idRecipe);
-      if (savedRecipes !== null) {
-        if (!result) {
-          const newArray = [...savedRecipes, data];
-          localStorage.setItem('favoriteRecipes', JSON.stringify(newArray));
-          validateFavorite();
-        } else {
-          const newArray = savedRecipes.filter((element) => (
-            element.idRecipe !== data.idRecipe
-          ));
-          localStorage.setItem('favoriteRecipes', JSON.stringify(newArray));
-          validateFavorite();
-        }
+      result = savedRecipes.some((element) => element.id === data.id);
+      if (!result) {
+        const newArray = [...savedRecipes, data];
+        localStorage.setItem('favoriteRecipes', JSON.stringify(newArray));
+        validateFavorite();
+      } else {
+        const newArray = savedRecipes.filter((element) => (
+          element.id !== data.id
+        ));
+        localStorage.setItem('favoriteRecipes', JSON.stringify(newArray));
+        validateFavorite();
       }
     }
   };

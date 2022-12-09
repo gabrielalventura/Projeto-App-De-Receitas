@@ -147,6 +147,7 @@ function CheckBoxIngredients(props) {
               className="ingredients-checkbox"
               onChange={ handleChange }
               checked={ done }
+              data-testid="ingredient-checkbox"
             />
           )
         }

@@ -1,4 +1,4 @@
-const mockDrink = [{
+const mockDrinkTest = { drinks: [{
   idDrink: '178319',
   strDrink: 'Aquamarine',
   strDrinkAlternate: null,
@@ -52,6 +52,6 @@ const mockDrink = [{
   strMeasure15: null,
   strCreativeCommonsConfirmed: 'No',
   dateModified: null,
-}];
+}] };
 
-export default mockDrink;
+export default mockDrinkTest;
