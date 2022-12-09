@@ -25,7 +25,9 @@ afterEach(() => {
 describe('testando o componente Meals.js and Drinks.js', () => {
   it('testando se a rota /meals conteḿ as informações necessárias', async () => {
     const { history } = renderWithRouter(
-      <App />,
+      <AppProvider>
+        <App />
+      </AppProvider>,
     );
     act(() => {
       history.push('/meals');
@@ -41,14 +43,16 @@ describe('testando o componente Meals.js and Drinks.js', () => {
     expect(imgFoodCorba).toBeInTheDocument();
 
     const allButtons = await screen.findAllByRole('button');
-    expect(allButtons.length).toBe(5);
+    expect(allButtons.length).toBe(7);
 
     userEvent.click(buttonProfile);
   });
 
   it('testando se a rota /drinks conteḿ as informações necessárias', async () => {
     const { history } = renderWithRouter(
-      <App />,
+      <AppProvider>
+        <App />
+      </AppProvider>,
     );
     act(() => {
       history.push('/drinks');
@@ -64,7 +68,7 @@ describe('testando o componente Meals.js and Drinks.js', () => {
     expect(imgDrink747).toBeInTheDocument();
 
     const allButtons = await screen.findAllByRole('button');
-    expect(allButtons.length).toBe(5);
+    expect(allButtons.length).toBe(7);
 
     userEvent.click(buttonProfile);
   });

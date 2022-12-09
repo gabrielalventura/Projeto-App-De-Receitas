@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import CheckBoxIngredients from './CheckBoxIngredients';
 import AppContext from '../context/AppContext';
 import Share from './Share';
-import FavoriteButton from '../Pages/FavoriteButton';
+import FavoriteButton from './FavoriteButton';
 
 function DrinkInProgress(props) {
   const { recipe, ingredients } = props;

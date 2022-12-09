@@ -86,6 +86,8 @@ function FavoriteButton(props) {
     <button
       type="button"
       onClick={ handleClick }
+      className="icon-containers"
+      data-testid="icon-container"
     >
       <img
         src={ icon }
