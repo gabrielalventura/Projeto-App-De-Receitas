@@ -1,10 +1,10 @@
 import React from 'react';
 import { screen, waitForElementToBeRemoved } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+// import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
 import renderWithRouter from './helpers/renderWithRouter';
 import mockMeals from './helpers/mockMealInProgress';
-import mockDrinks from './helpers/mockDrinkInProgress';
+// import mockDrinks from './helpers/mockDrinkInProgress';
 import App from '../App';
 import AppProvider from '../context/AppProvider';
 

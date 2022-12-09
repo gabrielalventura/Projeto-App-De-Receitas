@@ -50,6 +50,6 @@ const mockMeals = { meals: [{
   strMeasure20: null,
   strSource: null,
   dateModified: null,
-}]};
+}] };
 
 export default mockMeals;
