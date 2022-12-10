@@ -11,13 +11,13 @@ function FavoriteButton(props) {
     testid,
     type,
   } = props;
-  // { id, type, nationality, category, alcoholicOrNot, name, image }
 
   const validateFavorite = () => {
     let result = false;
     if (localStorage.getItem('favoriteRecipes') !== null) {
       const savedRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
       result = savedRecipes.some((element) => element.id === data.id);
+      console.log(result)
     }
     if (result) {
       setIcon(blackHeart);
@@ -53,7 +53,7 @@ function FavoriteButton(props) {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [icon]);
 
   const handleClick = () => {
     let result = false;
