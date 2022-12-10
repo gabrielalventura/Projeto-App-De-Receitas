@@ -17,7 +17,6 @@ function FavoriteButton(props) {
     if (localStorage.getItem('favoriteRecipes') !== null) {
       const savedRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
       result = savedRecipes.some((element) => element.id === data.id);
-      console.log(result)
     }
     if (result) {
       setIcon(blackHeart);
