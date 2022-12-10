@@ -8,11 +8,11 @@ import AppContext from '../context/AppContext';
 function FavoriteRecipes() {
   const { faveRecipes, setFaveRecipes } = useContext(AppContext);
   const retrieveFaveRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
-  console.log(retrieveFaveRecipes);
+  // console.log(retrieveFaveRecipes);
 
   const handleFilter = ({ target }) => {
     const chooseFilter = target.name;
-    console.log(chooseFilter);
+    // console.log(chooseFilter);
 
     if (chooseFilter === 'all') {
       setFaveRecipes(retrieveFaveRecipes);

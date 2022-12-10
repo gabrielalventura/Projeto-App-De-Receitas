@@ -1,4 +1,4 @@
-const mockMeals = { meals: [{
+const mockMealsTest = { meals: [{
   idMeal: '52771',
   strMeal: 'Spicy Arrabiata Penne',
   strDrinkAlternate: null,
@@ -52,4 +52,4 @@ const mockMeals = { meals: [{
   dateModified: null,
 }] };
 
-export default mockMeals;
+export default mockMealsTest;
