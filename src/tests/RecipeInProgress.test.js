@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, waitForElementToBeRemoved } from '@testing-library/react';
+import { screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
 import renderWithRouter from './helpers/renderWithRouter';
@@ -40,6 +40,36 @@ const SAVED_DRINKS = [
     ingredient: '1 oz Pineapple Juice',
   },
 ];
+
+const DONE_RECIPES = [
+  {
+    id: '52771',
+    nationality: 'Italian',
+    name: 'Spicy Arrabiata Penne',
+    category: 'Vegetarian',
+    image: 'https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg',
+    tags: [
+      'Pasta',
+      'Curry',
+    ],
+    alcoholicOrNot: '',
+    type: 'meal',
+    doneDate: '2022-12-10T10:00:00.100Z',
+  },
+  {
+    id: '178319',
+    nationality: '',
+    name: 'Aquamarine',
+    category: 'Cocktail',
+    image: 'https://www.thecocktaildb.com/images/media/drink/zvsre31572902738.jpg',
+    tags: [],
+    alcoholicOrNot: 'Alcoholic',
+    type: 'drink',
+    doneDate: '2022-12-10T10:00:00.100Z',
+  },
+];
+
+const finishTestId = 'finish-recipe-btn';
 
 describe('Realiza testes na página de receitas em progresso quando acessa uma comida', () => {
   beforeEach(() => {
@@ -474,5 +504,252 @@ describe('Testes do componente de compartilhar receita', () => {
 
     const copiedText = screen.getByText('Link copied!');
     expect(copiedText).toBeInTheDocument();
+  });
+});
+
+describe('Testando o botão Finish', () => {
+  it('1- Verifica se o botão finish inicia desabilitado e somente é habilitando quando todos os ingredientes estiverem checados, para comidas', async () => {
+    localStorage.clear();
+
+    jest.restoreAllMocks();
+
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(mockMealsTest),
+    });
+
+    // https://pt.stackoverflow.com/questions/480115/como-aplicar-mock-no-new-date-utilizando-o-jest
+    jest.useFakeTimers('modern').setSystemTime(new Date(2022, 11, 10, 7));
+
+    const { history } = renderWithRouter(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    act(() => {
+      history.push(mealsEndPoint);
+    });
+
+    const loading = screen.getByRole('heading', { name: /loading/i });
+    expect(loading).toBeInTheDocument();
+    await waitForElementToBeRemoved(loading);
+    expect(loading).not.toBeInTheDocument();
+
+    const finishBtn = screen.getByTestId(finishTestId);
+    expect(finishBtn).toBeDisabled();
+    const checkboxes = await screen.findAllByTestId(checkBoxTestId);
+    userEvent.click(checkboxes[0]);
+    expect(finishBtn).toBeDisabled();
+    userEvent.click(checkboxes[1]);
+    expect(finishBtn).toBeDisabled();
+    userEvent.click(checkboxes[2]);
+    expect(finishBtn).toBeDisabled();
+    userEvent.click(checkboxes[3]);
+    expect(finishBtn).toBeDisabled();
+    userEvent.click(checkboxes[4]);
+    expect(finishBtn).toBeDisabled();
+    userEvent.click(checkboxes[5]);
+    expect(finishBtn).toBeDisabled();
+    userEvent.click(checkboxes[6]);
+    expect(finishBtn).toBeDisabled();
+    userEvent.click(checkboxes[7]);
+    await waitFor(() => {
+      expect(finishBtn).not.toBeDisabled();
+    });
+    userEvent.click(finishBtn);
+    const storedDoneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
+    expect(storedDoneRecipes).not.toBe(null);
+    expect(storedDoneRecipes.length).toBe(1);
+    expect(storedDoneRecipes[0]).toEqual(DONE_RECIPES[0]);
+
+    expect(history.location.pathname).toBe('/done-recipes');
+
+    act(() => {
+      history.push(mealsEndPoint);
+    });
+
+    const loading2 = screen.getByRole('heading', { name: /loading/i });
+    expect(loading2).toBeInTheDocument();
+    await waitForElementToBeRemoved(loading2);
+    expect(loading2).not.toBeInTheDocument();
+
+    const checkboxes2 = screen.getAllByTestId(checkBoxTestId);
+    expect(checkboxes2[0]).toBeChecked();
+    const finishBtn2 = screen.getByTestId(finishTestId);
+    expect(finishBtn2).not.toBeDisabled();
+
+    userEvent.click(finishBtn2);
+    const storedDoneRecipes2 = JSON.parse(localStorage.getItem('doneRecipes'));
+    expect(storedDoneRecipes2).not.toBe(null);
+    expect(storedDoneRecipes2.length).toBe(1);
+    expect(storedDoneRecipes2[0]).toEqual(DONE_RECIPES[0]);
+  });
+  it('2- Verifica se o botão finish adiciona uma comida ao localStorage conservando receitas feitas anteriormente', async () => {
+    localStorage.clear();
+    const startStorage = [DONE_RECIPES[1]];
+    localStorage.setItem('doneRecipes', JSON.stringify(startStorage));
+    jest.restoreAllMocks();
+
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(mockMealsTest),
+    });
+
+    // https://pt.stackoverflow.com/questions/480115/como-aplicar-mock-no-new-date-utilizando-o-jest
+    jest.useFakeTimers('modern').setSystemTime(new Date(2022, 11, 10, 7));
+
+    const { history } = renderWithRouter(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    act(() => {
+      history.push(mealsEndPoint);
+    });
+
+    const loading = screen.getByRole('heading', { name: /loading/i });
+    expect(loading).toBeInTheDocument();
+    await waitForElementToBeRemoved(loading);
+    expect(loading).not.toBeInTheDocument();
+
+    const finishBtn = screen.getByTestId(finishTestId);
+    expect(finishBtn).toBeDisabled();
+    const checkboxes = await screen.findAllByTestId(checkBoxTestId);
+    userEvent.click(checkboxes[0]);
+    expect(finishBtn).toBeDisabled();
+    userEvent.click(checkboxes[1]);
+    expect(finishBtn).toBeDisabled();
+    userEvent.click(checkboxes[2]);
+    expect(finishBtn).toBeDisabled();
+    userEvent.click(checkboxes[3]);
+    expect(finishBtn).toBeDisabled();
+    userEvent.click(checkboxes[4]);
+    expect(finishBtn).toBeDisabled();
+    userEvent.click(checkboxes[5]);
+    expect(finishBtn).toBeDisabled();
+    userEvent.click(checkboxes[6]);
+    expect(finishBtn).toBeDisabled();
+    userEvent.click(checkboxes[7]);
+    await waitFor(() => {
+      expect(finishBtn).not.toBeDisabled();
+    });
+    userEvent.click(finishBtn);
+    const storedDoneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
+    expect(storedDoneRecipes).not.toBe(null);
+    expect(storedDoneRecipes.length).toBe(2);
+    expect(storedDoneRecipes[0]).toEqual(DONE_RECIPES[1]);
+    expect(storedDoneRecipes[1]).toEqual(DONE_RECIPES[0]);
+  });
+  it('3- Verifica se o botão finish inicia desabilitado e somente é habilitando quando todos os ingredientes estiverem checados, para bebidas', async () => {
+    localStorage.clear();
+
+    jest.restoreAllMocks();
+
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(mockDrinkTest),
+    });
+
+    // https://pt.stackoverflow.com/questions/480115/como-aplicar-mock-no-new-date-utilizando-o-jest
+    jest.useFakeTimers('modern').setSystemTime(new Date(2022, 11, 10, 7));
+
+    const { history } = renderWithRouter(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    act(() => {
+      history.push(drinksEndPoint);
+    });
+
+    const loading = screen.getByRole('heading', { name: /loading/i });
+    expect(loading).toBeInTheDocument();
+    await waitForElementToBeRemoved(loading);
+    expect(loading).not.toBeInTheDocument();
+
+    const finishBtn = screen.getByTestId(finishTestId);
+    expect(finishBtn).toBeDisabled();
+    const checkboxes = await screen.findAllByTestId(checkBoxTestId);
+    userEvent.click(checkboxes[0]);
+    expect(finishBtn).toBeDisabled();
+    userEvent.click(checkboxes[1]);
+    expect(finishBtn).toBeDisabled();
+    userEvent.click(checkboxes[2]);
+    await waitFor(() => {
+      expect(finishBtn).not.toBeDisabled();
+    });
+    userEvent.click(finishBtn);
+    const storedDoneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
+    expect(storedDoneRecipes).not.toBe(null);
+    expect(storedDoneRecipes.length).toBe(1);
+    expect(storedDoneRecipes[0]).toEqual(DONE_RECIPES[1]);
+
+    expect(history.location.pathname).toBe('/done-recipes');
+
+    act(() => {
+      history.push(drinksEndPoint);
+    });
+
+    const loading2 = screen.getByRole('heading', { name: /loading/i });
+    expect(loading2).toBeInTheDocument();
+    await waitForElementToBeRemoved(loading2);
+    expect(loading2).not.toBeInTheDocument();
+
+    const checkboxes2 = screen.getAllByTestId(checkBoxTestId);
+    expect(checkboxes2[0]).toBeChecked();
+    const finishBtn2 = screen.getByTestId(finishTestId);
+    expect(finishBtn2).not.toBeDisabled();
+
+    userEvent.click(finishBtn2);
+    const storedDoneRecipes2 = JSON.parse(localStorage.getItem('doneRecipes'));
+    expect(storedDoneRecipes2).not.toBe(null);
+    expect(storedDoneRecipes2.length).toBe(1);
+    expect(storedDoneRecipes2[0]).toEqual(DONE_RECIPES[1]);
+  });
+  it('4- Verifica se o botão finish adiciona uma bebida ao localStorage conservando receitas feitas anteriormente', async () => {
+    localStorage.clear();
+    const startStorage = [DONE_RECIPES[0]];
+    localStorage.setItem('doneRecipes', JSON.stringify(startStorage));
+    jest.restoreAllMocks();
+
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(mockDrinkTest),
+    });
+
+    // https://pt.stackoverflow.com/questions/480115/como-aplicar-mock-no-new-date-utilizando-o-jest
+    jest.useFakeTimers('modern').setSystemTime(new Date(2022, 11, 10, 7));
+
+    const { history } = renderWithRouter(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    act(() => {
+      history.push(drinksEndPoint);
+    });
+
+    const loading = screen.getByRole('heading', { name: /loading/i });
+    expect(loading).toBeInTheDocument();
+    await waitForElementToBeRemoved(loading);
+    expect(loading).not.toBeInTheDocument();
+
+    const finishBtn = screen.getByTestId(finishTestId);
+    expect(finishBtn).toBeDisabled();
+    const checkboxes = await screen.findAllByTestId(checkBoxTestId);
+    userEvent.click(checkboxes[0]);
+    expect(finishBtn).toBeDisabled();
+    userEvent.click(checkboxes[1]);
+    expect(finishBtn).toBeDisabled();
+    userEvent.click(checkboxes[2]);
+    await waitFor(() => {
+      expect(finishBtn).not.toBeDisabled();
+    });
+    userEvent.click(finishBtn);
+    const storedDoneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
+    expect(storedDoneRecipes).not.toBe(null);
+    expect(storedDoneRecipes.length).toBe(2);
+    expect(storedDoneRecipes[0]).toEqual(DONE_RECIPES[0]);
+    expect(storedDoneRecipes[1]).toEqual(DONE_RECIPES[1]);
   });
 });
