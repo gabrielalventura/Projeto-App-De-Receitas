@@ -409,3 +409,70 @@ describe('Testando o checkbox de ingredientes', () => {
     expect(ingredientLabel2).toHaveAttribute('class', classLabelTrue);
   });
 });
+
+describe('Testes do componente de compartilhar receita', () => {
+  it('1- Testa se ao clicar no botão Share na página de meals in progress', async () => {
+    jest.restoreAllMocks();
+
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(mockMealsTest),
+    });
+
+    window.document.execCommand = jest.fn(() => true);
+
+    const { history } = renderWithRouter(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    act(() => {
+      history.push(mealsEndPoint);
+    });
+
+    const loading = screen.getByRole('heading', { name: /loading/i });
+    expect(loading).toBeInTheDocument();
+    await waitForElementToBeRemoved(loading);
+    expect(loading).not.toBeInTheDocument();
+
+    const shareBtn = screen.getByTestId('share-btn');
+    expect(shareBtn).toBeInTheDocument();
+
+    userEvent.click(shareBtn);
+
+    const copiedText = screen.getByText('Link copied!');
+    expect(copiedText).toBeInTheDocument();
+  });
+  it('2- Testa se ao clicar no botão Share na página de drinks in progress', async () => {
+    jest.restoreAllMocks();
+
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(mockDrinkTest),
+    });
+
+    window.document.execCommand = jest.fn(() => true);
+
+    const { history } = renderWithRouter(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    act(() => {
+      history.push(drinksEndPoint);
+    });
+
+    const loading = screen.getByRole('heading', { name: /loading/i });
+    expect(loading).toBeInTheDocument();
+    await waitForElementToBeRemoved(loading);
+    expect(loading).not.toBeInTheDocument();
+
+    const shareBtn = screen.getByTestId('share-btn');
+    expect(shareBtn).toBeInTheDocument();
+
+    userEvent.click(shareBtn);
+
+    const copiedText = screen.getByText('Link copied!');
+    expect(copiedText).toBeInTheDocument();
+  });
+});
