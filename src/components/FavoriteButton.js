@@ -6,6 +6,7 @@ import blackHeart from '../images/blackHeartIcon.svg';
 function FavoriteButton(props) {
   const [icon, setIcon] = useState(blackHeart);
   const [data, setData] = useState({});
+  const [loading, setLoading] = useState(true);
   const {
     recipe,
     testid,
@@ -23,6 +24,7 @@ function FavoriteButton(props) {
     } else {
       setIcon(whiteHeart);
     }
+    setLoading(false);
   };
 
   const getData = () => {
@@ -54,6 +56,10 @@ function FavoriteButton(props) {
     getData();
   }, [icon]);
 
+  useEffect(() => {
+    getData();
+  }, []);
+
   const handleClick = () => {
     let result = false;
     let savedRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
@@ -84,11 +90,15 @@ function FavoriteButton(props) {
       className="icon-containers"
       data-testid="icon-container"
     >
-      <img
-        src={ icon }
-        alt="favorite"
-        data-testid={ testid }
-      />
+      {
+        !loading && (
+          <img
+            src={ icon }
+            alt="favorite"
+            data-testid={ testid }
+          />
+        )
+      }
     </button>
   );
 }

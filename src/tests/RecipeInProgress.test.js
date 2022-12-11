@@ -105,7 +105,7 @@ describe('Realiza testes na página de receitas em progresso quando acessa uma c
     const recipeName = screen.getByRole('heading', { level: 3 });
     const shareBtn = screen.getByRole('button', { name: /share/i });
     const favoriteBtn = screen.getByTestId(iconContainer);
-    const favoriteIcon = screen.getByAltText('favorite');
+    const favoriteIcon = await screen.findByAltText('favorite');
     const recipeCategory = screen.getByTestId('recipe-category');
     const ingredientsCheck = await screen.findAllByRole('checkbox');
     const ingredientsLabel = screen.getByTestId(frinstLabel);
@@ -156,7 +156,7 @@ describe('Realiza testes na página de receitas em progresso quando acessa uma c
     const recipeName = screen.getByRole('heading', { level: 3 });
     const shareBtn = screen.getByRole('button', { name: /share/i });
     const favoriteBtn = screen.getByTestId(iconContainer);
-    const favoriteIcon = screen.getByAltText('favorite');
+    const favoriteIcon = await screen.findByAltText('favorite');
     const recipeCategory = screen.getByTestId('recipe-category');
     const ingredientsCheck = await screen.findAllByRole('checkbox');
     const ingredientsLabel = screen.getByTestId(frinstLabel);
@@ -202,7 +202,7 @@ describe('Testando a funcionalidade do botão favoritar', () => {
     expect(loading).not.toBeInTheDocument();
 
     const favoriteBtn = screen.getByTestId(iconContainer);
-    const favoriteIcon = screen.getByAltText('favorite');
+    const favoriteIcon = await screen.findByAltText('favorite');
     expect(favoriteBtn).toBeInTheDocument();
     expect(favoriteIcon).toBeInTheDocument();
     expect(favoriteIcon).toHaveAttribute('src', whiteHeart);
