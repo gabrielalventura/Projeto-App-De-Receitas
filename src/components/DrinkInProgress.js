@@ -4,11 +4,12 @@ import { useHistory } from 'react-router-dom';
 import CheckBoxIngredients from './CheckBoxIngredients';
 import AppContext from '../context/AppContext';
 import Share from './Share';
+import FavoriteButton from './FavoriteButton';
 
 function DrinkInProgress(props) {
   const { recipe, ingredients } = props;
   const { inProgress, wasShared } = useContext(AppContext);
-  const [able, setAble] = useState(false);
+  const [notAble, setNotAble] = useState(true);
   const {
     idDrink,
     strDrink,
@@ -21,10 +22,10 @@ function DrinkInProgress(props) {
     const doneSteps = inProgress.drinks.filter((element) => (
       element.id === recipe[0].idDrink
     ));
-    if (doneSteps.length === ingredients.length) {
-      setAble(true);
+    if (doneSteps.length === ingredients.length && ingredients.length !== 0) {
+      setNotAble(false);
     } else {
-      setAble(false);
+      setNotAble(true);
     }
   };
 
@@ -54,7 +55,7 @@ function DrinkInProgress(props) {
     }
     const actualArray = [...actualDone];
     const alreadyDone = actualArray.some((element) => (
-      element.idDrink === recipe[0].idDrink
+      element.id === recipe[0].idDrink
     ));
     if (actualArray.length > 0 && !alreadyDone) {
       const savedRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
@@ -84,7 +85,11 @@ function DrinkInProgress(props) {
         id={ recipe[0].idDrink }
         testid="share-btn"
       />
-      <button type="button" data-testid="favorite-btn">Favorite</button>
+      <FavoriteButton
+        testid="favorite-btn"
+        recipe={ recipe[0] }
+        type="drink"
+      />
       <div>
         { wasShared && <p>Link copied!</p>}
       </div>
@@ -106,7 +111,7 @@ function DrinkInProgress(props) {
       <button
         type="button"
         data-testid="finish-recipe-btn"
-        disabled={ !able }
+        disabled={ notAble }
         onClick={ finishRecipe }
       >
         Finish

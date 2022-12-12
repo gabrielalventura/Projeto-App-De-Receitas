@@ -37,6 +37,8 @@ function Cards(props) {
     const targetID = target.value;
     const newArray = faveRecipes.filter((recipe) => recipe.id !== targetID);
     setFaveRecipes(newArray);
+
+    localStorage.setItem('favoriteRecipes', JSON.stringify(newArray));
   };
 
   return (

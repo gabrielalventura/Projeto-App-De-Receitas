@@ -18,6 +18,8 @@ function AppProvider({ children }) {
     meals: [],
     drinks: [],
   });
+  const [filteredRecipes, setFilteredRecipes] = useState({ meals: [], drinks: [] });
+  const [currentPage, setCurrentPage] = useState('');
 
   const srchToggle = useCallback(() => {
     setIsActive(isActive === false);
@@ -42,6 +44,10 @@ function AppProvider({ children }) {
     setInProgress,
     recipesInProgress,
     setRecipesInProgress,
+    filteredRecipes,
+    setFilteredRecipes,
+    currentPage,
+    setCurrentPage,
   }), [
     user,
     isActive,
@@ -58,6 +64,10 @@ function AppProvider({ children }) {
     inProgress,
     recipesInProgress,
     setRecipesInProgress,
+    filteredRecipes,
+    setFilteredRecipes,
+    currentPage,
+    setCurrentPage,
   ]);
 
   return (
