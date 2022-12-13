@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from './helpers/renderWithRouter';
 import DoneRecipes from '../Pages/DoneRecipes';
@@ -92,6 +92,8 @@ describe('Testa os botões de filtragem', () => {
 
 describe('Testa funcionalidade do share', () => {
   test('Testa se o botão Share exibe a mensagem quando clicado', () => {
+    window.document.execCommand = jest.fn(() => true);
+
     renderWithRouter(
       <AppProvider>
         <DoneRecipes />
@@ -101,5 +103,8 @@ describe('Testa funcionalidade do share', () => {
     const shareBtn = screen.getAllByRole('button');
 
     expect(shareBtn[3]).toBeInTheDocument();
+    const copied = screen.findByText('/Link copied/i');
+    userEvent.click(shareBtn[3]);
+    waitFor(() => expect(copied).toBeInTheDocument());
   });
 });
