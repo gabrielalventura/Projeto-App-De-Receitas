@@ -18,8 +18,8 @@ function SearchBar() {
     };
     objState[type] = api[type];
     if (api[type] === null) {
-    // eslint-disable-next-line quotes
-      global.alert(`Sorry, we haven't found any recipes for these filters.`);
+      const phrase = 'Sorry, ';
+      global.alert(`${phrase}we haven't found any recipes for these filters.`);
       objState = {
         meals: [],
         drinks: [],
