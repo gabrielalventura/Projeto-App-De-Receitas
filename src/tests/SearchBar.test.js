@@ -91,9 +91,11 @@ describe('Testa o componente SearchBar', () => {
     expect(buttons[0]).toBeInTheDocument();
     userEvent.click(buttons[0]);
 
-    const nameBtn = screen.getByTestId(FIRST_LETTER);
-    expect(nameBtn).toBeInTheDocument();
-    userEvent.click(nameBtn);
+    const fstBtn = screen.getByTestId(FIRST_LETTER);
+    expect(fstBtn).toBeInTheDocument();
+    expect(fstBtn).not.toBeChecked();
+    userEvent.click(fstBtn);
+    expect(fstBtn).toBeChecked();
 
     const searchInput = screen.getByTestId(SEARCH_INPUT);
     expect(searchInput).toBeInTheDocument();

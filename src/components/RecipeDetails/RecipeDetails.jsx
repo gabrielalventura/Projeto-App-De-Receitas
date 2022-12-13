@@ -19,14 +19,13 @@ function RecipesDetails({ history }) {
           const sJsonMeals = jsonMeals.meals.slice(0, six);
           return setRecomended(sJsonMeals);
         }
-        if (history.location.pathname.includes('meal')) {
-          const respondeDrinks = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
-          const jsonDrinks = await respondeDrinks.json();
-          const sJsonDrinks = jsonDrinks.drinks.slice(0, six);
-          return setRecomended(sJsonDrinks);
-        }
+        // if (history.location.pathname.includes('meal')) {
+        const respondeDrinks = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
+        const jsonDrinks = await respondeDrinks.json();
+        const sJsonDrinks = jsonDrinks.drinks.slice(0, six);
+        return setRecomended(sJsonDrinks);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
     drinksOrMeals();
