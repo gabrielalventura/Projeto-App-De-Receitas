@@ -35,13 +35,11 @@ function RecipesDetails({ history }) {
 
           return setRecomended(responseMeals);
         }
-        if (history.location.pathname.includes('meal')) {
-          const responseDrinks = await genericFetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=', 'meal');
+        const responseDrinks = await genericFetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=', 'meal');
 
-          return setRecomended(responseDrinks);
-        }
+        return setRecomended(responseDrinks);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
     drinksOrMeals();
