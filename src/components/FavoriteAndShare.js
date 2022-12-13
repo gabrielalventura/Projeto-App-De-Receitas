@@ -10,7 +10,7 @@ function FavoriteAndShare(props) {
     history,
     selectedCategory,
   } = props;
-  console.log(selectedCategory.alcoholic);
+  // console.log(selectedCategory.alcoholic);
   const dataContext = useContext(AppContext);
   return (
     <div>
