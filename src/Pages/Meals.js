@@ -8,7 +8,9 @@ function Meals() {
   const {
     fetchFoodsCategorys: { data: { meals: categorysFoods } },
     fetchMeals: { data },
+    filteredRecipes,
     setRecipes,
+    setCurrentPage,
   } = useContext(AppContext) || [];
   const [selectedFilterCategory, setSelectedFilterCategory] = useState([]);
   const [dataFoods, setDataFoods] = useState([]);
@@ -17,13 +19,18 @@ function Meals() {
   useEffect(() => {
     if (selectedFilterCategory.length > 0) {
       setDataFoods(filteredCategoryFood.data);
+    } else if (filteredRecipes.meals.length > 0) {
+      setDataFoods(filteredRecipes);
     } else {
       setDataFoods(data);
     }
-  }, [filteredCategoryFood, data, selectedFilterCategory]);
+  }, [filteredCategoryFood, data, selectedFilterCategory, filteredRecipes]);
   useEffect(() => {
     setRecipes(data);
   }, [data]);
+  useEffect(() => {
+    setCurrentPage('meals');
+  });
 
   return (
     <div>

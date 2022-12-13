@@ -4,12 +4,13 @@ import { useHistory } from 'react-router-dom';
 import CheckBoxIngredients from './CheckBoxIngredients';
 import AppContext from '../context/AppContext';
 import Share from './Share';
-import FavoriteButton from '../Pages/FavoriteButton';
+import FavoriteButton from './FavoriteButton';
 
 function MealInProgress(props) {
   const { recipe, ingredients } = props;
+  // console.log(recipe)
   const { inProgress, wasShared } = useContext(AppContext);
-  const [able, setAble] = useState(false);
+  const [notAble, setNotAble] = useState(true);
   const {
     idMeal,
     strArea,
@@ -23,12 +24,15 @@ function MealInProgress(props) {
     const doneSteps = inProgress.meals.filter((element) => (
       element.id === recipe[0].idMeal
     ));
-    if (doneSteps.length === ingredients.length) {
-      setAble(true);
+    if (doneSteps.length === ingredients.length && ingredients.length !== 0) {
+      setNotAble(false);
     } else {
-      setAble(false);
+      setNotAble(true);
     }
   };
+  useEffect(() => {
+    validateIngredients();
+  }, []);
 
   useEffect(() => {
     validateIngredients();
@@ -60,7 +64,7 @@ function MealInProgress(props) {
     }
     const actualArray = [...actualDone];
     const alreadyDone = actualArray.some((element) => (
-      element.idMeal === recipe[0].idMeal
+      element.id === recipe[0].idMeal
     ));
     if (actualArray.length > 0 && !alreadyDone) {
       const savedRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
@@ -115,7 +119,7 @@ function MealInProgress(props) {
       <button
         type="button"
         data-testid="finish-recipe-btn"
-        disabled={ !able }
+        disabled={ notAble }
         onClick={ finishRecipe }
       >
         Finish

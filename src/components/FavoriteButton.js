@@ -6,6 +6,7 @@ import blackHeart from '../images/blackHeartIcon.svg';
 function FavoriteButton(props) {
   const [icon, setIcon] = useState(blackHeart);
   const [data, setData] = useState({});
+  const [loading, setLoading] = useState(true);
   const {
     recipe,
     testid,
@@ -16,13 +17,14 @@ function FavoriteButton(props) {
     let result = false;
     if (localStorage.getItem('favoriteRecipes') !== null) {
       const savedRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
-      result = savedRecipes.some((element) => element.idRecipe === data.idRecipe);
+      result = savedRecipes.some((element) => element.id === data.id);
     }
     if (result) {
       setIcon(blackHeart);
     } else {
       setIcon(whiteHeart);
     }
+    setLoading(false);
   };
   const getData = () => {
     if (type === 'meal') {
@@ -49,11 +51,9 @@ function FavoriteButton(props) {
     validateFavorite();
   };
 
-  // console.log(recipe);
-
   useEffect(() => {
     getData();
-  }, [recipe]);
+  }, [recipe, icon]);
 
   const handleClick = () => {
     let result = false;
@@ -63,19 +63,17 @@ function FavoriteButton(props) {
       validateFavorite();
       savedRecipes = [data];
     } else {
-      result = savedRecipes.some((element) => element.idRecipe === data.idRecipe);
-      if (savedRecipes !== null) {
-        if (!result) {
-          const newArray = [...savedRecipes, data];
-          localStorage.setItem('favoriteRecipes', JSON.stringify(newArray));
-          validateFavorite();
-        } else {
-          const newArray = savedRecipes.filter((element) => (
-            element.idRecipe !== data.idRecipe
-          ));
-          localStorage.setItem('favoriteRecipes', JSON.stringify(newArray));
-          validateFavorite();
-        }
+      result = savedRecipes.some((element) => element.id === data.id);
+      if (!result) {
+        const newArray = [...savedRecipes, data];
+        localStorage.setItem('favoriteRecipes', JSON.stringify(newArray));
+        validateFavorite();
+      } else {
+        const newArray = savedRecipes.filter((element) => (
+          element.id !== data.id
+        ));
+        localStorage.setItem('favoriteRecipes', JSON.stringify(newArray));
+        validateFavorite();
       }
     }
   };
@@ -84,12 +82,18 @@ function FavoriteButton(props) {
     <button
       type="button"
       onClick={ handleClick }
+      className="icon-containers"
+      data-testid="icon-container"
     >
-      <img
-        src={ icon }
-        alt="favorite"
-        data-testid={ testid }
-      />
+      {
+        !loading && (
+          <img
+            src={ icon }
+            alt="favorite"
+            data-testid={ testid }
+          />
+        )
+      }
     </button>
   );
 }

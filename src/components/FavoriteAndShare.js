@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import Share from './Share';
-import FavoriteButton from '../Pages/FavoriteButton';
+import FavoriteButton from './FavoriteButton';
 import AppContext from '../context/AppContext';
 
 function FavoriteAndShare(props) {
