@@ -26,7 +26,6 @@ function FavoriteButton(props) {
     }
     setLoading(false);
   };
-
   const getData = () => {
     if (type === 'meal') {
       setData({
@@ -54,11 +53,7 @@ function FavoriteButton(props) {
 
   useEffect(() => {
     getData();
-  }, [icon]);
-
-  useEffect(() => {
-    getData();
-  }, []);
+  }, [recipe, icon]);
 
   const handleClick = () => {
     let result = false;
