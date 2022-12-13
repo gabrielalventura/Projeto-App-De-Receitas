@@ -11,7 +11,6 @@ function FavoriteButton(props) {
     testid,
     type,
   } = props;
-  // { id, type, nationality, category, alcoholicOrNot, name, image }
 
   const validateFavorite = () => {
     let result = false;
@@ -25,7 +24,6 @@ function FavoriteButton(props) {
       setIcon(whiteHeart);
     }
   };
-  console.log(recipe);
   const getData = () => {
     if (type === 'meal') {
       setData({
@@ -51,19 +49,19 @@ function FavoriteButton(props) {
     validateFavorite();
   };
 
+  // console.log(recipe);
+
   useEffect(() => {
     getData();
-  }, []);
+  }, [recipe]);
 
   const handleClick = () => {
     let result = false;
     let savedRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
-    console.log(savedRecipes);
     if (savedRecipes === null) {
       localStorage.setItem('favoriteRecipes', JSON.stringify([data]));
       validateFavorite();
       savedRecipes = [data];
-      console.log(savedRecipes);
     } else {
       result = savedRecipes.some((element) => element.idRecipe === data.idRecipe);
       if (savedRecipes !== null) {
