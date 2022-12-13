@@ -17,9 +17,12 @@ function Meals() {
   const filteredCategoryFood = useFetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${selectedFilterCategory[0]}`);
 
   useEffect(() => {
+    // let chaves = Object.keys(filteredRecipes);
+    // console.log(Object.keys(filteredRecipes));
     if (selectedFilterCategory.length > 0) {
       setDataFoods(filteredCategoryFood.data);
     } else if (filteredRecipes.meals.length > 0) {
+      // console.log(filteredRecipes);
       setDataFoods(filteredRecipes);
     } else {
       setDataFoods(data);
