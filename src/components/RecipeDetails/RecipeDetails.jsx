@@ -1,8 +1,19 @@
 import React, { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import AppContext from '../../context/AppContext';
-import { converStrToId } from './HelperRecipesDetails';
+import {
+  converStrToId,
+  convertObjToPadronized,
+  filterMeasuresAndIngredients,
+  filterDinamic,
+  genericFetch,
+} from './HelperRecipesDetails';
+
 import '../../styles/RecomendedRecipes.css';
+import RecomendedCard from '../RecomendedCard';
+import List from '../List';
+import CardDetails from '../CardDetails';
+import FavoriteAndShare from '../FavoriteAndShare';
 
 function RecipesDetails({ history }) {
   const [selectedCategory, setSelectedCategory] = useState({});
@@ -11,19 +22,16 @@ function RecipesDetails({ history }) {
   const dataContext = useContext(AppContext);
   useEffect(() => {
     const drinksOrMeals = async () => {
-      const six = 6;
       try {
         if (history.location.pathname.includes('drink')) {
-          const responseMeals = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
-          const jsonMeals = await responseMeals.json();
-          const sJsonMeals = jsonMeals.meals.slice(0, six);
-          return setRecomended(sJsonMeals);
+          const responseMeals = await genericFetch('https://www.themealdb.com/api/json/v1/1/search.php?s=', 'drink');
+
+          return setRecomended(responseMeals);
         }
         if (history.location.pathname.includes('meal')) {
-          const respondeDrinks = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
-          const jsonDrinks = await respondeDrinks.json();
-          const sJsonDrinks = jsonDrinks.drinks.slice(0, six);
-          return setRecomended(sJsonDrinks);
+          const responseDrinks = await genericFetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=', 'meal');
+
+          return setRecomended(responseDrinks);
         }
       } catch (error) {
         console.log(error);
@@ -37,48 +45,33 @@ function RecipesDetails({ history }) {
       if (history.location.pathname.includes('drink')) {
         const responseDrink = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${urlInclude}`);
         const jsonDrink = await responseDrink.json();
-        const filterIngredients = Object.keys(jsonDrink.drinks[0])
-          .filter((drink) => drink.includes('strIngredient')) || [];
-        const filterMeasures = Object.keys(jsonDrink.drinks[0])
-          .filter((drink) => drink.includes('strMeasure')) || [];
-        const categoryAlcoholic = `${jsonDrink.drinks[0].strAlcoholic}
-        ${jsonDrink.drinks[0].strCategory}`;
+        const filterMAndI = filterMeasuresAndIngredients(jsonDrink, 'drink');
 
-        const objectFinnaly = {
-          drinks: true,
-          title: jsonDrink.drinks[0].strDrink,
-          thumb: jsonDrink.drinks[0].strDrinkThumb,
-          category: categoryAlcoholic,
-          instructions: jsonDrink.drinks[0].strInstructions,
-          ingredients: filterIngredients
-            .map((ingredient) => jsonDrink.drinks[0][ingredient]),
-          measures: filterMeasures.map((measure) => jsonDrink.drinks[0][measure]),
-          id: jsonDrink.drinks[0].idDrink,
-          alcoholic: jsonDrink.drinks[0].strAlcoholic,
-          simpleCategory: jsonDrink.drinks[0].strCategory,
-        };
-        return setSelectedCategory(objectFinnaly);
+        const ingredients = filterDinamic(filterMAndI, jsonDrink, 'drink')[0];
+        const measures = filterDinamic(filterMAndI, jsonDrink, 'drink')[1];
+
+        const obj = convertObjToPadronized('drink', jsonDrink);
+
+        obj.ingredients = ingredients;
+        obj.measures = measures;
+        // obj.category = `${jsonDrink.drinks[0].strAlcoholic}
+        // ${jsonDrink.drinks[0].strCategory}`;
+
+        return setSelectedCategory(obj);
       }
       const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${urlInclude}`);
-      const json = await response.json();
+      const jsonMeals = await response.json();
+      const filterMAndI = filterMeasuresAndIngredients(jsonMeals, 'meal');
+      console.log(jsonMeals);
+      const ingredients = filterDinamic(filterMAndI, jsonMeals, 'meal')[0];
+      const measures = filterDinamic(filterMAndI, jsonMeals, 'meal')[1];
+      const obj = convertObjToPadronized('meal', jsonMeals);
 
-      const filterIngredients = Object.keys(json.meals[0])
-        .filter((meal) => meal.includes('strIngredient')) || [];
+      obj.ingredients = ingredients;
+      obj.measures = measures;
+      obj.category = jsonMeals.meals[0].strCategory;
 
-      const filterMeasures = Object.keys(json.meals[0])
-        .filter((meal) => meal.includes('strMeasure')) || [];
-      const objectFinnaly = {
-        meals: true,
-        linkYtb: json.meals[0].strYoutube,
-        title: json.meals[0].strMeal,
-        thumb: json.meals[0].strMealThumb,
-        category: json.meals[0].strCategory,
-        instructions: json.meals[0].strInstructions,
-        ingredients: filterIngredients.map((ingredient) => json.meals[0][ingredient]),
-        measures: filterMeasures.map((measure) => json.meals[0][measure]),
-        id: json.meals[0].idMeal,
-      };
-      return setSelectedCategory(objectFinnaly);
+      return setSelectedCategory(obj);
     }
     fetchDrinksOrFoods();
   }, [
@@ -90,41 +83,23 @@ function RecipesDetails({ history }) {
 
   return (
     <div>
-      <h2 data-testid="recipe-title">{selectedCategory.title}</h2>
-      <img
-        src={ selectedCategory.thumb }
-        alt={ selectedCategory.title }
-        data-testid="recipe-photo"
+      <CardDetails
+        selectedCategory={ selectedCategory }
+        history={ history }
       />
-      <p data-testid="recipe-category">
-        {selectedCategory.category}
-      </p>
-      <ul>
-        {selectedCategory.ingredients && selectedCategory.ingredients
-          .map((ingredient, index) => {
-            if (ingredient !== null && ingredient.length > 0) {
-              return (
-                <li data-testid={ `${index}-ingredient-name-and-measure` } key={ index }>
-                  {ingredient}
-                  {' of '}
-                  {selectedCategory.measures[index]}
-                </li>
-              );
-            }
-            return '';
-          })}
-      </ul>
-      <p data-testid="instructions">
-        {
-          selectedCategory.instructions
-        }
-      </p>
-      <iframe
-        height="480"
-        width="500"
-        title={ `Video de instrução para o prato ${selectedCategory.title}` }
-        src={ selectedCategory.linkYtb }
-        data-testid="video"
+
+      <List
+        selectedCategory={ selectedCategory }
+      />
+
+      <FavoriteAndShare
+        selectedCategory={ selectedCategory }
+        history={ history }
+      />
+
+      <RecomendedCard
+        recomended={ recomended }
+        history={ history }
       />
       <button
         type="button"
@@ -142,46 +117,12 @@ function RecipesDetails({ history }) {
       >
         Start Recipe
       </button>
-      <div className="containerRecomended">
-        {
-          history.location.pathname.includes('meal')
-            && recomended.length > 0
-            && recomended[0].strDrinkThumb && (
-            recomended.map((element, index) => (
-              <div key={ index } data-testid={ `${index}-recommendation-card` }>
-                <img
-                  src={ element.strDrinkThumb }
-                  alt={ element.strDrink }
-                  className="imgRecomended"
-                />
-                <p data-testid={ `${index}-recommendation-title` }>{element.strDrink}</p>
-              </div>
-            ))
-          )
-        }
-        {
-          history.location.pathname.includes('drink')
-            && recomended.length > 0
-            && recomended[0].strMealThumb && (
-            recomended.map((element, index) => (
-              <div key={ index } data-testid={ `${index}-recommendation-card` }>
-                <img
-                  src={ element.strMealThumb }
-                  alt={ element.strMeal }
-                  className="imgRecomended"
-                />
-                <p data-testid={ `${index}-recommendation-title` }>{element.strMeal}</p>
-              </div>
-            ))
-          )
-        }
-      </div>
     </div>
   );
 }
 
-RecipesDetails.propTypes = ({
+RecipesDetails.propTypes = {
   history: PropTypes.objectOf(Object),
-}).isRequired;
+}.isRequired;
 
 export default RecipesDetails;
