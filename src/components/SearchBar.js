@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import AppContext from '../context/AppContext';
 
 function SearchBar() {
@@ -8,10 +9,12 @@ function SearchBar() {
   const ing = 'ingredient';
   const nam = 'name';
   const fst = 'first-letter';
+  const history = useHistory();
 
   const filteredFetch = async (url, type) => {
     const response = await fetch(url);
     const api = await response.json();
+    const id = type === 'meals' ? 'idMeal' : 'idDrink';
     let objState = {
       meals: [],
       drinks: [],
@@ -24,6 +27,8 @@ function SearchBar() {
         meals: [],
         drinks: [],
       };
+    } else if (api[type].length === 1) {
+      history.push(`/${type}/${api[type][0][id]}`);
     }
     console.log(api);
     return objState;
