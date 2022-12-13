@@ -20,6 +20,13 @@ function RecipesDetails({ history }) {
   const [recomended, setRecomended] = useState([]);
   const urlInclude = converStrToId(history.location.pathname);
   const dataContext = useContext(AppContext);
+
+  const getRecipeInProgress = () => {
+    const recipesInProgress = localStorage.getItem('inProgressRecipes');
+    const progressExist = false;
+    const verifyProgress = true;
+  }
+
   useEffect(() => {
     const drinksOrMeals = async () => {
       try {

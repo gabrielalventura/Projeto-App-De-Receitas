@@ -33,7 +33,7 @@ function SearchBar() {
         drinks: [],
       };
       setFilteredRecipes(objState);
-    } else if (searchCat === fst) {
+    } else {
       if (inputValue.length > 1) {
         global.alert('Your search must have only 1 (one) character');
         return;
@@ -65,7 +65,7 @@ function SearchBar() {
         meals: [],
       };
       setFilteredRecipes(objState);
-    } else if (searchCat === fst) {
+    } else {
       if (inputValue.length > 1) {
         global.alert('Your search must have only 1 (one) character');
         return;
@@ -83,7 +83,7 @@ function SearchBar() {
   const requestSearch = async () => {
     if (currentPage === 'meals') {
       mealSearch();
-    } else if (currentPage === 'drinks') {
+    } else {
       drinkSearch();
     }
   };

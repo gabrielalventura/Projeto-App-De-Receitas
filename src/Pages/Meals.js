@@ -20,6 +20,7 @@ function Meals() {
     if (selectedFilterCategory.length > 0) {
       setDataFoods(filteredCategoryFood.data);
     } else if (filteredRecipes.meals.length > 0) {
+      console.log('testando')
       setDataFoods(filteredRecipes);
     } else {
       setDataFoods(data);
