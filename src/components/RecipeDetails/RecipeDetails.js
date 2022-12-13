@@ -18,14 +18,27 @@ import FavoriteAndShare from '../FavoriteAndShare';
 function RecipesDetails({ history }) {
   const [selectedCategory, setSelectedCategory] = useState({});
   const [recomended, setRecomended] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [recipeInProgress, setRecipeInProgress] = useState(false);
   const urlInclude = converStrToId(history.location.pathname);
   const dataContext = useContext(AppContext);
+  // console.log(urlInclude);
 
-  // const getRecipeInProgress = () => {
-  //   const recipesInProgress = localStorage.getItem('inProgressRecipes');
-  //   const progressExist = false;
-  //   const verifyProgress = true;
-  // };
+  const getRecipeInProgress = () => {
+    const recipesInProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    let progressExist = false;
+    let verifyProgress = false;
+    if (recipesInProgress !== null) {
+      progressExist = true;
+      if (recipesInProgress.meals.length > 0) {
+        verifyProgress = recipesInProgress.meals.some((meal) => (
+          meal.id === urlInclude
+        ));
+      }
+    }
+    setRecipeInProgress((progressExist && verifyProgress));
+    setIsLoading(false);
+  };
 
   useEffect(() => {
     const drinksOrMeals = async () => {
@@ -44,6 +57,10 @@ function RecipesDetails({ history }) {
     };
     drinksOrMeals();
   }, [history.location.pathname]);
+
+  useEffect(() => {
+    getRecipeInProgress();
+  }, []);
 
   useEffect(() => {
     async function fetchDrinksOrFoods() {
@@ -67,7 +84,7 @@ function RecipesDetails({ history }) {
       const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${urlInclude}`);
       const jsonMeals = await response.json();
       const filterMAndI = filterMeasuresAndIngredients(jsonMeals, 'meal');
-      console.log(jsonMeals);
+      // console.log(jsonMeals);
       const ingredients = filterDinamic(filterMAndI, jsonMeals, 'meal')[0];
       const measures = filterDinamic(filterMAndI, jsonMeals, 'meal')[1];
       const obj = convertObjToPadronized('meal', jsonMeals);
@@ -106,22 +123,24 @@ function RecipesDetails({ history }) {
         recomended={ recomended }
         history={ history }
       />
-      <button
-        type="button"
-        data-testid="start-recipe-btn"
-        style={ { position: 'fixed', bottom: '0' } }
-        onClick={ async () => {
-          if (history.location.pathname.includes('meal')) {
-            await dataContext.setRecipesInProgress([selectedCategory]);
-            history.push(`/meals/${selectedCategory.id}/in-progress`);
-          } else {
-            await dataContext.setRecipesInProgress([selectedCategory]);
-            history.push(`/drinks/${selectedCategory.id}/in-progress`);
-          }
-        } }
-      >
-        Start Recipe
-      </button>
+      {!isLoading && (
+        <button
+          type="button"
+          data-testid="start-recipe-btn"
+          style={ { position: 'fixed', bottom: '0' } }
+          onClick={ async () => {
+            if (history.location.pathname.includes('meal')) {
+              await dataContext.setRecipesInProgress([selectedCategory]);
+              history.push(`/meals/${selectedCategory.id}/in-progress`);
+            } else {
+              await dataContext.setRecipesInProgress([selectedCategory]);
+              history.push(`/drinks/${selectedCategory.id}/in-progress`);
+            }
+          } }
+        >
+          { !recipeInProgress ? 'Start Recipe' : 'Continue Recipe'}
+        </button>
+      ) }
     </div>
   );
 }
