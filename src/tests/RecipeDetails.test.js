@@ -27,6 +27,10 @@ const mockLocalStorage = {
   drinks: [],
 };
 
+const recipeTitle = 'recipe-title';
+const recipePhoto = 'recipe-photo';
+const recipeCategory = 'recipe-category';
+
 describe('TESTANDO O COMPONENT RECIPEDETAILS', () => {
   const meal = '/meals/52977';
   const drink = '/drinks/15997';
@@ -41,13 +45,13 @@ describe('TESTANDO O COMPONENT RECIPEDETAILS', () => {
     });
     expect(history.location.pathname).toBe(meal);
 
-    const title = await screen.findByTestId('recipe-title');
+    const title = await screen.findByTestId(recipeTitle);
     expect(title).toBeInTheDocument();
 
-    const img = await screen.findByTestId('recipe-photo');
+    const img = await screen.findByTestId(recipePhoto);
     expect(img).toBeInTheDocument();
 
-    const category = await screen.findByTestId('recipe-category');
+    const category = await screen.findByTestId(recipeCategory);
     expect(category).toBeInTheDocument();
 
     const instructions = await screen.findByTestId('instructions');
@@ -73,13 +77,13 @@ describe('TESTANDO O COMPONENT RECIPEDETAILS', () => {
     });
     expect(history.location.pathname).toBe(drink);
 
-    const title = await screen.findByTestId('recipe-title');
+    const title = await screen.findByTestId(recipeTitle);
     expect(title).toBeInTheDocument();
 
-    const img = await screen.findByTestId('recipe-photo');
+    const img = await screen.findByTestId(recipePhoto);
     expect(img).toBeInTheDocument();
 
-    const category = await screen.findByTestId('recipe-category');
+    const category = await screen.findByTestId(recipeCategory);
     expect(category).toBeInTheDocument();
 
     const instructions = await screen.findByTestId('instructions');
@@ -168,13 +172,13 @@ describe('TESTANDO O COMPONENT RECIPEDETAILS', () => {
 
     console.log(localStorage.getItem('inProgressRecipes'));
 
-    const title = await screen.findByTestId('recipe-title');
+    const title = await screen.findByTestId(recipeTitle);
     expect(title).toBeInTheDocument();
 
-    const img = await screen.findByTestId('recipe-photo');
+    const img = await screen.findByTestId(recipePhoto);
     expect(img).toBeInTheDocument();
 
-    const category = await screen.findByTestId('recipe-category');
+    const category = await screen.findByTestId(recipeCategory);
     expect(category).toBeInTheDocument();
 
     const instructions = await screen.findByTestId('instructions');
