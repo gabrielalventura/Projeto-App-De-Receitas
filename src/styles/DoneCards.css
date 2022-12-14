@@ -1,13 +1,12 @@
 .doneCard-image {
-  width: 110px;
-  border-radius: 50%;
-  /* margin-right: 10px; */
+ border-radius: 50%; 
+ width: 110px;
 }
 
 .cardInf {
-  display:flex;
-  text-decoration: none;
+  display: flex;
   color: black;
+  text-decoration: none;
 }
 
 a:hover {
@@ -32,11 +31,11 @@ a:visited {
 }
 
 .uniqueCard p {
-  font-size: 14px;
-  display: inline-block;
-  margin: 2px;
   background-color: white;
   border-radius: 5px;
+  display: inline-block;
+  font-size: 14px;
+  margin: 2px;
   padding: 2px;
 }
 

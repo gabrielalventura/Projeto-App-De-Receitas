@@ -4,28 +4,28 @@
 
 .filters {
   display: flex;
-  width: 350px;
   margin-left: 34px;
+  width: 350px;
 }
 
 .doneFiltersAll {
-  margin: 2px;
-  border: none;
   background-color: rgba(0, 0, 0, 0);
+  border: none;
+  margin: 2px; 
 }
 
 .doneFiltersMeals {
-  margin: 2px;
-  border: none;
   background-color: rgba(0, 0, 0, 0);
+  border: none;
+  margin: 2px;
 }
 
 .doneFiltersDrinks {
-  margin: 2px;
-  border: none;
   background-color: rgba(0, 0, 0, 0);
+  border: none;
+  margin: 2px;
 }
 
 body {
-  background-color: #F5F5F5;
+  background-color: whitesmoke;
 }
