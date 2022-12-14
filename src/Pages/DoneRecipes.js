@@ -38,6 +38,7 @@ function DoneRecipes() {
       <div>
         <div>
           <button
+            className="doneFiltersAll"
             name="all"
             type="button"
             data-testid="filter-by-all-btn"
@@ -46,6 +47,7 @@ function DoneRecipes() {
             All
           </button>
           <button
+            className="doneFiltersMeals"
             name="meals"
             type="button"
             data-testid="filter-by-meal-btn"
@@ -54,6 +56,7 @@ function DoneRecipes() {
             Meals
           </button>
           <button
+            className="doneFiltersDrinks"
             name="drinks"
             type="button"
             data-testid="filter-by-drink-btn"
@@ -62,7 +65,7 @@ function DoneRecipes() {
             Drinks
           </button>
         </div>
-        <section>
+        <div>
           { filtered !== null
           && filtered.map((recipe, index) => (<DoneCards
             key={ index }
@@ -77,7 +80,7 @@ function DoneRecipes() {
             tags={ recipe.tags }
             id={ recipe.id }
           />))}
-        </section>
+        </div>
         <Footer />
       </div>
     </>

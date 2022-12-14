@@ -9,7 +9,7 @@ import SearchBar from './SearchBar';
 function Header({ title }) {
   const { isSrchActive, srchToggle } = useContext(AppContext);
   return (
-    <nav>
+    <nav className="headerInfo">
       <Link to="/profile">
         <img
           alt="profileIcon"
