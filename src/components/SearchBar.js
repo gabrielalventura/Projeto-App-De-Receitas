@@ -30,7 +30,6 @@ function SearchBar() {
     } else if (api[type].length === 1) {
       history.push(`/${type}/${api[type][0][id]}`);
     }
-    console.log(api);
     return objState;
   };
 
