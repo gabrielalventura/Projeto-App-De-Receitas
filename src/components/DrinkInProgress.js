@@ -19,15 +19,19 @@ function DrinkInProgress(props) {
   } = recipe[0];
 
   const validateIngredients = () => {
-    const doneSteps = inProgress.drinks.filter((element) => (
-      element.id === recipe[0].idDrink
-    ));
+    let doneSteps = [];
+    if (inProgress.drinks[recipe[0].idDrink] !== undefined) {
+      doneSteps = inProgress.drinks[recipe[0].idDrink];
+    }
     if (doneSteps.length === ingredients.length && ingredients.length !== 0) {
       setNotAble(false);
     } else {
       setNotAble(true);
     }
   };
+  useEffect(() => {
+    validateIngredients();
+  }, []);
 
   useEffect(() => {
     validateIngredients();
