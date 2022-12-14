@@ -14,32 +14,35 @@ const whiteHeart = 'whiteHeartIcon.svg';
 const mealsEndPoint = '/meals/52771/in-progress';
 const drinksEndPoint = '/drinks/178319/in-progress';
 const ingredient1Meals = '1 pound penne rigate';
-const ingredient1drinks = '2 oz Hpnotiq';
+const ingredient2Meals = '1/4 cup olive oil';
+const ingredient1Drinks = '2 oz Hpnotiq';
+const ingredient2Drinks = '1 oz Pineapple Juice';
 const frinstLabel = '0-ingredient-step';
 const checkBoxTestId = 'ingredient-checkbox';
 const classLabelFalse = 'ingredients-label-false';
 const classLabelTrue = 'ingredients-label-true';
-const SAVED_MEALS = [
-  {
-    id: '52771',
-    ingredient: ingredient1Meals,
-  },
-  {
-    id: '52771',
-    ingredient: '1/4 cup olive oil',
-  },
-];
-
-const SAVED_DRINKS = [
-  {
-    id: '178319',
-    ingredient: ingredient1drinks,
-  },
-  {
-    id: '178319',
-    ingredient: '1 oz Pineapple Juice',
-  },
-];
+// const mockLocalStorage = {
+//   drinks: {
+//     17222: [
+//       '1 3/4 shot  Gin',
+//       '1 Shot  Grand Marnier',
+//     ],
+//     178319: [
+//       '2 oz Hpnotiq',
+//       '1 oz Pineapple Juice',
+//     ],
+//   },
+//   meals: {
+//     52771: [
+//       '1/4 cup olive oil',
+//       ingredient1Meals,
+//     ],
+//     52977: [
+//       '1 cup  Lentils',
+//       '1 large Onion',
+//     ],
+//   },
+// };
 
 const DONE_RECIPES = [
   {
@@ -248,7 +251,7 @@ describe('Testando a funcionalidade do botão favoritar', () => {
     await waitForElementToBeRemoved(loading);
     expect(loading).not.toBeInTheDocument();
 
-    const favoriteIcon = screen.getByAltText('favorite');
+    const favoriteIcon = await screen.findByAltText('favorite');
     expect(favoriteIcon).toHaveAttribute('src', whiteHeart);
     const prevLocalStorage = JSON.parse(localStorage.getItem('favoriteRecipes'));
     expect(prevLocalStorage.length).toBe(1);
@@ -301,15 +304,15 @@ describe('Testando o checkbox de ingredientes', () => {
     expect(ingredientLabel).toHaveAttribute('class', classLabelTrue);
     const AFTER_LOCALSTORAGE = JSON.parse(localStorage.getItem('inProgressRecipes'));
 
-    expect(AFTER_LOCALSTORAGE.meals.length).toBe(2);
-    expect(AFTER_LOCALSTORAGE.meals[0]).toEqual(SAVED_MEALS[0]);
-    expect(AFTER_LOCALSTORAGE.meals[1]).toEqual(SAVED_MEALS[1]);
+    expect(AFTER_LOCALSTORAGE.meals[52771].length).toBe(2);
+    expect(AFTER_LOCALSTORAGE.meals[52771]).toContain(ingredient1Meals);
+    expect(AFTER_LOCALSTORAGE.meals[52771]).toContain(ingredient2Meals);
 
     userEvent.click(checkboxes[0]);
     const AFTER_LOCALSTORAGE2 = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    expect(AFTER_LOCALSTORAGE2.meals.length).toBe(1);
-    expect(AFTER_LOCALSTORAGE2.meals[0]).toEqual(SAVED_MEALS[1]);
-    const result1 = AFTER_LOCALSTORAGE2.meals.includes(SAVED_MEALS[0]);
+    expect(AFTER_LOCALSTORAGE2.meals[52771].length).toBe(1);
+    expect(AFTER_LOCALSTORAGE2.meals[52771]).toContain(ingredient2Meals);
+    const result1 = AFTER_LOCALSTORAGE2.meals[52771].includes(ingredient1Meals);
     expect(result1).toBe(false);
 
     jest.clearAllMocks();
@@ -344,7 +347,7 @@ describe('Testando o checkbox de ingredientes', () => {
     const checkboxes = await screen.findAllByTestId(checkBoxTestId);
     expect(checkboxes.length).toBe(3);
     const ingredientLabel = screen.getByTestId(frinstLabel);
-    expect(ingredientLabel).toHaveTextContent(ingredient1drinks);
+    expect(ingredientLabel).toHaveTextContent(ingredient1Drinks);
     expect(ingredientLabel).toHaveAttribute('class', classLabelFalse);
 
     userEvent.click(checkboxes[0]);
@@ -352,15 +355,15 @@ describe('Testando o checkbox de ingredientes', () => {
     expect(ingredientLabel).toHaveAttribute('class', classLabelTrue);
     const AFTER_LOCALSTORAGE = JSON.parse(localStorage.getItem('inProgressRecipes'));
 
-    expect(AFTER_LOCALSTORAGE.drinks.length).toBe(2);
-    expect(AFTER_LOCALSTORAGE.drinks[0]).toEqual(SAVED_DRINKS[0]);
-    expect(AFTER_LOCALSTORAGE.drinks[1]).toEqual(SAVED_DRINKS[1]);
+    expect(AFTER_LOCALSTORAGE.drinks[178319].length).toBe(2);
+    expect(AFTER_LOCALSTORAGE.drinks[178319]).toContain(ingredient1Drinks);
+    expect(AFTER_LOCALSTORAGE.drinks[178319]).toContain(ingredient2Drinks);
 
     userEvent.click(checkboxes[0]);
     const AFTER_LOCALSTORAGE2 = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    expect(AFTER_LOCALSTORAGE2.drinks.length).toBe(1);
-    expect(AFTER_LOCALSTORAGE2.drinks[0]).toEqual(SAVED_DRINKS[1]);
-    const result1 = AFTER_LOCALSTORAGE2.drinks.includes(SAVED_MEALS[0]);
+    expect(AFTER_LOCALSTORAGE2.drinks[178319].length).toBe(1);
+    expect(AFTER_LOCALSTORAGE2.drinks[178319]).toContain(ingredient2Drinks);
+    const result1 = AFTER_LOCALSTORAGE2.drinks[178319].includes(ingredient1Drinks);
     expect(result1).toBe(false);
 
     jest.clearAllMocks();
@@ -385,7 +388,7 @@ describe('Testando o checkbox de ingredientes', () => {
 
     const INITIAL_LOCALSTORAGE = JSON.parse(localStorage.getItem('inProgressRecipes'));
     expect(INITIAL_LOCALSTORAGE).not.toBe(null);
-    const storedMeals = INITIAL_LOCALSTORAGE.meals;
+    const storedMeals = INITIAL_LOCALSTORAGE.meals[52771];
     expect(storedMeals.length).toBe(1);
 
     const loading = screen.getByRole('heading', { name: /loading/i });
@@ -399,7 +402,7 @@ describe('Testando o checkbox de ingredientes', () => {
     expect(ingredientLabel).toHaveTextContent(ingredient1Meals);
     expect(ingredientLabel).toHaveAttribute('class', classLabelFalse);
     const ingredientLabel2 = screen.getByTestId('1-ingredient-step');
-    expect(ingredientLabel2).toHaveTextContent('1/4 cup olive oil');
+    expect(ingredientLabel2).toHaveTextContent(ingredient2Meals);
     expect(ingredientLabel2).toHaveAttribute('class', classLabelTrue);
   });
   it('4- Verifica se ao acessar novamente a página de bebida, o ingrediente salvo ainda permanesse selecionado', async () => {
@@ -421,7 +424,7 @@ describe('Testando o checkbox de ingredientes', () => {
 
     const INITIAL_LOCALSTORAGE = JSON.parse(localStorage.getItem('inProgressRecipes'));
     expect(INITIAL_LOCALSTORAGE).not.toBe(null);
-    const storedDrinks = INITIAL_LOCALSTORAGE.drinks;
+    const storedDrinks = INITIAL_LOCALSTORAGE.drinks[178319];
     expect(storedDrinks.length).toBe(1);
 
     const loading = screen.getByRole('heading', { name: /loading/i });
@@ -432,10 +435,10 @@ describe('Testando o checkbox de ingredientes', () => {
     const checkboxes = await screen.findAllByTestId(checkBoxTestId);
     expect(checkboxes.length).toBe(3);
     const ingredientLabel = screen.getByTestId(frinstLabel);
-    expect(ingredientLabel).toHaveTextContent(ingredient1drinks);
+    expect(ingredientLabel).toHaveTextContent(ingredient1Drinks);
     expect(ingredientLabel).toHaveAttribute('class', classLabelFalse);
     const ingredientLabel2 = screen.getByTestId('1-ingredient-step');
-    expect(ingredientLabel2).toHaveTextContent('1 oz Pineapple Juice');
+    expect(ingredientLabel2).toHaveTextContent(ingredient2Drinks);
     expect(ingredientLabel2).toHaveAttribute('class', classLabelTrue);
   });
 });

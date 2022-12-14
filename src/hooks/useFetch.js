@@ -9,7 +9,7 @@ function useFetch(url) {
         const dataJson = await response.json();
         setData(dataJson);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
     fetchFood();
