@@ -3,6 +3,10 @@ import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import DoneCards from '../components/DoneCards';
+import '../styles/DoneRecipes.css';
+import All from '../images/All.png';
+import foods from '../images/foods.png';
+import drinks from '../images/drinks.png';
 
 function DoneRecipes() {
   const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes')) || [];
@@ -10,7 +14,7 @@ function DoneRecipes() {
   const [filtered, setFiltered] = useState([doneRecipes]);
 
   const handleFilter = ({ target }) => {
-    const chooseFilter = target.name;
+    const chooseFilter = target.closest('button').name;
 
     if (chooseFilter === 'all') {
       setFiltered(doneRecipes);
@@ -36,36 +40,48 @@ function DoneRecipes() {
     <>
       <Header title="Done Recipes" />
       <div>
-        <div>
+        <div className="filters">
           <button
             className="doneFiltersAll"
             name="all"
             type="button"
-            data-testid="filter-by-all-btn"
+            // data-testid="filter-by-all-btn"
             onClick={ handleFilter }
           >
-            All
+            <img
+              data-testid="filter-by-all-btn"
+              src={ All }
+              alt="all"
+            />
           </button>
           <button
             className="doneFiltersMeals"
             name="meals"
             type="button"
-            data-testid="filter-by-meal-btn"
+            // data-testid="filter-by-meal-btn"
             onClick={ handleFilter }
           >
-            Meals
+            <img
+              data-testid="filter-by-meal-btn"
+              src={ foods }
+              alt="foods"
+            />
           </button>
           <button
             className="doneFiltersDrinks"
             name="drinks"
             type="button"
-            data-testid="filter-by-drink-btn"
+            // data-testid="filter-by-drink-btn"
             onClick={ handleFilter }
           >
-            Drinks
+            <img
+              data-testid="filter-by-drink-btn"
+              src={ drinks }
+              alt="drinks"
+            />
           </button>
         </div>
-        <div>
+        <div className="allRecipes">
           { filtered !== null
           && filtered.map((recipe, index) => (<DoneCards
             key={ index }

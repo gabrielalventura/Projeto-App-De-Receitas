@@ -40,6 +40,7 @@ function DoneCards(props) {
     <div>
       <div className="uniqueCard">
         <Link
+          className="cardInf"
           to={ type === 'meal' ? `/meals/${id}` : `/drinks/${id}` }
         >
           <img
@@ -48,40 +49,42 @@ function DoneCards(props) {
             src={ image }
             alt="recipe-img"
           />
-          <h3 data-testid={ `${index}-horizontal-name` }>{ name }</h3>
+          <div className="cardInfos">
+            <h3 data-testid={ `${index}-horizontal-name` }>{ name }</h3>
+
+            <span
+              data-testid={ `${index}-horizontal-done-date` }
+            >
+              { doneDate }
+            </span>
+            {
+              type === 'meal'
+                ? (
+                  <>
+                    <h5
+                      data-testid={ `${index}-horizontal-top-text` }
+                    >
+                      {`${nationality} - ${category}`}
+                    </h5>
+                    <div>
+                      {
+                        tags.map((tagName) => (
+                          <p
+                            key={ `${tagName}` }
+                            data-testid={ `${index}-${tagName}-horizontal-tag` }
+                          >
+                            { `${tagName}` }
+                          </p>
+                        ))
+                      }
+                    </div>
+                  </>)
+                : (
+                  <h5 data-testid={ `${index}-horizontal-top-text` }>{alcohol}</h5>)
+            }
+          </div>
         </Link>
-        <div className="recipesInfo">
-          <span
-            data-testid={ `${index}-horizontal-done-date` }
-          >
-            { doneDate }
-          </span>
-          {
-            type === 'meal'
-              ? (
-                <>
-                  <h4
-                    data-testid={ `${index}-horizontal-top-text` }
-                  >
-                    {`${nationality} - ${category}`}
-                  </h4>
-                  <div>
-                    {
-                      tags.map((tagName) => (
-                        <p
-                          key={ `${tagName}` }
-                          data-testid={ `${index}-${tagName}-horizontal-tag` }
-                        >
-                          { `${tagName}` }
-                        </p>
-                      ))
-                    }
-                  </div>
-                </>)
-              : (
-                <h4 data-testid={ `${index}-horizontal-top-text` }>{alcohol}</h4>)
-          }
-          {/* <button
+        {/* <button
         type="button"
         data-testid={ `${index}-horizontal-share-btn` }
         src="src/images/shareIcon.svg"
@@ -91,20 +94,22 @@ function DoneCards(props) {
       >
         Share
       </button> */}
+        <div className="btnShare">
           <Share
             index={ index }
             type={ type }
             id={ id }
             testid={ `${index}-horizontal-share-btn` }
           />
-          <div>
-            {
-              wasShared && <p data-testid="text-share">Link copied!</p>
-            }
-          </div>
+        </div>
+        <div>
+          {
+            wasShared && <p data-testid="text-share">Link copied!</p>
+          }
         </div>
       </div>
     </div>
+
   );
 }
 
