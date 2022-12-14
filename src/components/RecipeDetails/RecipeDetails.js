@@ -22,17 +22,18 @@ function RecipesDetails({ history }) {
   const [recipeInProgress, setRecipeInProgress] = useState(false);
   const urlInclude = converStrToId(history.location.pathname);
   const dataContext = useContext(AppContext);
-  // console.log(urlInclude);
 
   const getRecipeInProgress = () => {
     const recipesInProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
     let progressExist = false;
     let verifyProgress = false;
+    const type = history.location.pathname.includes('meals') ? 'meals' : 'drinks';
     if (recipesInProgress !== null) {
       progressExist = true;
-      if (recipesInProgress.meals.length > 0) {
-        verifyProgress = recipesInProgress.meals.some((meal) => (
-          meal.id === urlInclude
+      const recipes = Object.keys(recipesInProgress[type]);
+      if (recipes.length > 0) {
+        verifyProgress = recipes.some((recipe) => (
+          recipe === urlInclude
         ));
       }
     }

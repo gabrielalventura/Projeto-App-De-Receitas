@@ -12,14 +12,16 @@ function CheckBoxIngredients(props) {
     if (localStorage.getItem('inProgressRecipes') !== null) {
       const savedProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
       let result = false;
-      if (Object.keys(recipe).includes('idMeal')) {
-        result = savedProgress.meals.some((element) => (
-          element.id === recipe.idMeal && element.ingredient === ingredient
+      if (Object.keys(recipe).includes('idMeal')
+        && savedProgress.meals[recipe.idMeal] !== undefined) {
+        result = savedProgress.meals[recipe.idMeal].some((element) => (
+          element === ingredient
         ));
       }
-      if (Object.keys(recipe).includes('idDrink')) {
-        result = savedProgress.drinks.some((element) => (
-          element.id === recipe.idDrink && element.ingredient === ingredient
+      if (Object.keys(recipe).includes('idDrink')
+        && savedProgress.drinks[recipe.idDrink] !== undefined) {
+        result = savedProgress.drinks[recipe.idDrink].some((element) => (
+          element === ingredient
         ));
       }
       setDone(result);
@@ -36,75 +38,89 @@ function CheckBoxIngredients(props) {
   }, []);
 
   const removeItemMeal = async (id) => {
-    if (inProgress.meals[0].ingredient !== ingredient) {
-      setInProgress({
-        ...inProgress,
-        meals: inProgress.meals.filter((element) => (
-          (element.id !== id)
-          || (element.id === id && element.ingredient !== ingredient)
-        )),
-      });
-    }
-    if (inProgress.meals[0].ingredient === ingredient) {
+    if (inProgress.meals[id][0] !== ingredient) {
       await setInProgress({
         ...inProgress,
-        meals: inProgress.meals.filter((element) => (
-          (element.id !== id)
-          || (element.id === id && element.ingredient !== ingredient)
-        )),
+        meals: { ...inProgress.meals,
+          [id]: inProgress.meals[id].filter((element) => (
+            element !== ingredient
+          )) },
+      });
+    }
+    if (inProgress.meals[id][0] === ingredient) {
+      await setInProgress({
+        ...inProgress,
+        meals: { ...inProgress.meals,
+          [id]: inProgress.meals[id].filter((element) => (
+            element !== ingredient
+          )) },
       });
       const storage = JSON.parse(localStorage.getItem('inProgressRecipes'));
       const newStorage = {
         drinks: storage.drinks,
-        meals: storage.meals.filter((element) => (
-          (element.id !== id)
-        || (element.id === id && element.ingredient !== ingredient)
-        )) };
+        meals: { ...storage.meals,
+          [id]: storage.meals[id].filter((element) => (
+            element !== ingredient
+          )) } };
       localStorage.setItem('inProgressRecipes', JSON.stringify(newStorage));
     }
   };
 
   const addItemMeal = async (id) => {
-    setInProgress({
-      ...inProgress,
-      meals: [...inProgress.meals, { id, ingredient }],
-    });
+    if (inProgress.meals[id]) {
+      setInProgress({
+        ...inProgress,
+        meals: { ...inProgress.meals, [id]: [...inProgress.meals[id], ingredient] },
+      });
+    } else {
+      setInProgress({
+        ...inProgress,
+        meals: { ...inProgress.meals, [id]: [ingredient] },
+      });
+    }
   };
 
   const removeItemDrink = async (id) => {
-    if (inProgress.drinks[0].ingredient !== ingredient) {
-      setInProgress({
-        ...inProgress,
-        drinks: inProgress.drinks.filter((element) => (
-          (element.id !== id)
-          || (element.id === id && element.ingredient !== ingredient)
-        )),
-      });
-    }
-    if (inProgress.drinks[0].ingredient === ingredient) {
+    if (inProgress.drinks[id][0] !== ingredient) {
       await setInProgress({
         ...inProgress,
-        drinks: inProgress.drinks.filter((element) => (
-          (element.id !== id)
-          || (element.id === id && element.ingredient !== ingredient)
-        )),
+        drinks: { ...inProgress.drinks,
+          [id]: inProgress.drinks[id].filter((element) => (
+            element !== ingredient
+          )) },
+      });
+    }
+    if (inProgress.drinks[id][0] === ingredient) {
+      await setInProgress({
+        ...inProgress,
+        drinks: { ...inProgress.drinks,
+          [id]: inProgress.drinks[id].filter((element) => (
+            element !== ingredient
+          )) },
       });
       const storage = JSON.parse(localStorage.getItem('inProgressRecipes'));
       const newStorage = {
         meals: storage.meals,
-        drinks: storage.drinks.filter((element) => (
-          (element.id !== id)
-        || (element.id === id && element.ingredient !== ingredient)
-        )) };
+        drinks: { ...storage.drinks,
+          [id]: storage.drinks[id].filter((element) => (
+            element !== ingredient
+          )) } };
       localStorage.setItem('inProgressRecipes', JSON.stringify(newStorage));
     }
   };
 
   const addItemDrink = async (id) => {
-    setInProgress({
-      ...inProgress,
-      drinks: [...inProgress.drinks, { id, ingredient }],
-    });
+    if (inProgress.drinks[id]) {
+      setInProgress({
+        ...inProgress,
+        drinks: { ...inProgress.drinks, [id]: [...inProgress.drinks[id], ingredient] },
+      });
+    } else {
+      setInProgress({
+        ...inProgress,
+        drinks: { ...inProgress.drinks, [id]: [ingredient] },
+      });
+    }
   };
 
   const handleChange = async () => {
@@ -126,7 +142,8 @@ function CheckBoxIngredients(props) {
   };
 
   useEffect(() => {
-    if (inProgress.meals.length > 0 || inProgress.drinks.length > 0) {
+    if (Object.keys(inProgress.meals).length > 0
+      || Object.keys(inProgress.drinks).length > 0) {
       localStorage.setItem('inProgressRecipes', JSON.stringify(inProgress));
     }
   }, [inProgress]);

@@ -21,9 +21,10 @@ function MealInProgress(props) {
   } = recipe[0];
 
   const validateIngredients = () => {
-    const doneSteps = inProgress.meals.filter((element) => (
-      element.id === recipe[0].idMeal
-    ));
+    let doneSteps = [];
+    if (inProgress.meals[recipe[0].idMeal] !== undefined) {
+      doneSteps = inProgress.meals[recipe[0].idMeal];
+    }
     if (doneSteps.length === ingredients.length && ingredients.length !== 0) {
       setNotAble(false);
     } else {
