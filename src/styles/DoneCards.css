@@ -1,11 +1,11 @@
 .doneCard-image {
- border-radius: 50%; 
- width: 110px;
+  border-radius: 50%;
+  width: 110px;
 }
 
 .cardInf {
-  display: flex;
   color: black;
+  display: flex;
   text-decoration: none;
 }
 
