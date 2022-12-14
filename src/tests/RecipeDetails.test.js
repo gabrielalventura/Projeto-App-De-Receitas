@@ -20,6 +20,17 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
+const mockLocalStorage = {
+  meals: {
+    52977: [],
+  },
+  drinks: [],
+};
+
+const recipeTitle = 'recipe-title';
+const recipePhoto = 'recipe-photo';
+const recipeCategory = 'recipe-category';
+
 describe('TESTANDO O COMPONENT RECIPEDETAILS', () => {
   const meal = '/meals/52977';
   const drink = '/drinks/15997';
@@ -34,13 +45,13 @@ describe('TESTANDO O COMPONENT RECIPEDETAILS', () => {
     });
     expect(history.location.pathname).toBe(meal);
 
-    const title = await screen.findByTestId('recipe-title');
+    const title = await screen.findByTestId(recipeTitle);
     expect(title).toBeInTheDocument();
 
-    const img = await screen.findByTestId('recipe-photo');
+    const img = await screen.findByTestId(recipePhoto);
     expect(img).toBeInTheDocument();
 
-    const category = await screen.findByTestId('recipe-category');
+    const category = await screen.findByTestId(recipeCategory);
     expect(category).toBeInTheDocument();
 
     const instructions = await screen.findByTestId('instructions');
@@ -66,13 +77,13 @@ describe('TESTANDO O COMPONENT RECIPEDETAILS', () => {
     });
     expect(history.location.pathname).toBe(drink);
 
-    const title = await screen.findByTestId('recipe-title');
+    const title = await screen.findByTestId(recipeTitle);
     expect(title).toBeInTheDocument();
 
-    const img = await screen.findByTestId('recipe-photo');
+    const img = await screen.findByTestId(recipePhoto);
     expect(img).toBeInTheDocument();
 
-    const category = await screen.findByTestId('recipe-category');
+    const category = await screen.findByTestId(recipeCategory);
     expect(category).toBeInTheDocument();
 
     const instructions = await screen.findByTestId('instructions');
@@ -145,5 +156,40 @@ describe('TESTANDO O COMPONENT RECIPEDETAILS', () => {
     expect(recomendedCardFour).toBeInTheDocument();
     expect(recomendedCardFive).toBeInTheDocument();
     expect(recomendedCardSix).toBeInTheDocument();
+  });
+  it('verifica se ao carregar os detalhes de uma receita já iniciada o botão continue recipe é renderizado na tela', async () => {
+    localStorage.setItem('inProgressRecipes', JSON.stringify(mockLocalStorage));
+    const { history } = renderWithRouter(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    act(() => {
+      history.push(meal);
+    });
+
+    expect(history.location.pathname).toBe(meal);
+
+    console.log(localStorage.getItem('inProgressRecipes'));
+
+    const title = await screen.findByTestId(recipeTitle);
+    expect(title).toBeInTheDocument();
+
+    const img = await screen.findByTestId(recipePhoto);
+    expect(img).toBeInTheDocument();
+
+    const category = await screen.findByTestId(recipeCategory);
+    expect(category).toBeInTheDocument();
+
+    const instructions = await screen.findByTestId('instructions');
+    expect(instructions).toBeInTheDocument();
+
+    const ytb = await screen.findByTestId('video');
+    expect(ytb).toBeInTheDocument();
+
+    const continueRecipe = await screen.findByRole('button', { name: 'Continue Recipe' });
+    expect(continueRecipe).toBeInTheDocument();
+
+    userEvent.click(continueRecipe);
   });
 });
